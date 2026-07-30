@@ -1,6 +1,5 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
 
 # Public headers.
 #
@@ -12,9 +11,193 @@ pub_hdrs = $($pub/ pub_hdrs)
 
 lib{sdl3}: $pub/{$pub_hdrs}
 
-# Private headers and sources as well as dependencies.
+# --- sources ---
 #
-lib{sdl3}: {h c}{**} $impl_libs $intf_libs
+# Prefer path/to/dir/c{*} (path before target type) for granularity.
+# Exclude SDL_test (separate package). Platform backends are gated below.
+#
+
+# Root-level units.
+#
+lib{sdl3}: {h c}{*}
+
+# Core portable subsystems (non-platform trees).
+#
+lib{sdl3}: \
+  atomic/{h c}{*} \
+  core/{h c}{*} \
+  cpuinfo/{h c}{*} \
+  dynapi/{h c}{*} \
+  events/{h c}{*} \
+  stdlib/{h c}{*} \
+  video/{h c}{*} \
+  video/yuv2rgb/{h c}{*} \
+  video/dummy/{h c}{*} \
+  video/offscreen/{h c}{*} \
+  audio/{h c}{*} \
+  audio/dummy/{h c}{*} \
+  audio/disk/{h c}{*} \
+  render/{h c}{*} \
+  render/software/{h c}{*} \
+  render/opengl/{h c}{*} \
+  render/opengles2/{h c}{*} \
+  render/gpu/{h c}{*} \
+  render/vulkan/{h c}{*} \
+  gpu/{h c}{*} \
+  gpu/vulkan/{h c}{*} \
+  joystick/{h c}{*} \
+  joystick/virtual/{h c}{*} \
+  joystick/hidapi/{h c}{*} \
+  haptic/{h c}{*} \
+  haptic/dummy/{h c}{*} \
+  haptic/hidapi/{h c}{*} \
+  sensor/{h c}{*} \
+  camera/{h c}{*} \
+  camera/dummy/{h c}{*} \
+  thread/{h c}{*} \
+  timer/{h c}{*} \
+  time/{h c}{*} \
+  filesystem/{h c}{*} \
+  filesystem/posix/{h c}{*} \
+  loadso/{h c}{*} \
+  locale/{h c}{*} \
+  misc/{h c}{*} \
+  power/{h c}{*} \
+  process/{h c}{*} \
+  process/posix/{h c}{*} \
+  storage/{h c}{*} \
+  storage/generic/{h c}{*} \
+  storage/steam/{h c}{*} \
+  dialog/{h c}{*} \
+  tray/{h c}{*} \
+  main/{h c}{*} \
+  main/generic/{h c}{*} \
+  io/{h c}{*} \
+  io/generic/{h c}{*} \
+  hidapi/c{SDL_hidapi} \
+  hidapi/h{SDL_hidapi_*} \
+  libm/c{*}
+
+# --- platform backends (macOS) ---
+#
+macos = ($c.target.class == 'macos')
+
+lib{sdl3}: \
+  video/cocoa/{h c m}{*} \
+  audio/coreaudio/{h c m}{*} \
+  camera/coremedia/{h c m}{*} \
+  dialog/cocoa/{h c m}{*} \
+  filesystem/cocoa/{h c m}{*} \
+  gpu/metal/{h c m}{*} \
+  joystick/apple/{h c m}{*} \
+  joystick/darwin/{h c m}{*} \
+  haptic/darwin/{h c m}{*} \
+  locale/macos/{h c m}{*} \
+  misc/macos/{h c m}{*} \
+  power/macos/{h c m}{*} \
+  render/metal/{h c m}{*} \
+  tray/cocoa/{h c m}{*} \
+  thread/pthread/{h c}{*} \
+  time/unix/{h c}{*} \
+  timer/unix/{h c}{*} \
+  loadso/dlopen/{h c}{*} \
+  sensor/dummy/{h c}{*} \
+  core/unix/{h c}{*}: include = $macos
+
+# Note: hidapi/mac/hid.c is #included from hidapi/SDL_hidapi.c (not a separate
+# translation unit). Same pattern may apply on other platforms.
+#
+# --- platform backends (Linux) ---
+#
+linux = ($c.target.class == 'linux')
+
+lib{sdl3}: \
+  video/x11/{h c}{*} \
+  video/wayland/{h c}{*} \
+  video/kmsdrm/{h c}{*} \
+  audio/alsa/{h c}{*} \
+  audio/pulseaudio/{h c}{*} \
+  audio/pipewire/{h c}{*} \
+  core/linux/{h c}{*} \
+  core/unix/{h c}{*} \
+  filesystem/unix/{h c}{*} \
+  joystick/linux/{h c}{*} \
+  haptic/linux/{h c}{*} \
+  locale/unix/{h c}{*} \
+  misc/unix/{h c}{*} \
+  power/linux/{h c}{*} \
+  thread/pthread/{h c}{*} \
+  time/unix/{h c}{*} \
+  timer/unix/{h c}{*} \
+  loadso/dlopen/{h c}{*} \
+  dialog/unix/{h c}{*} \
+  tray/unix/{h c}{*} \
+  camera/v4l2/{h c}{*} \
+  camera/pipewire/{h c}{*} \
+  sensor/dummy/{h c}{*} \
+  hidapi/linux/{h c}{*} \
+  io/io_uring/{h c}{*}: include = $linux
+
+# --- platform backends (Windows) ---
+#
+windows = ($c.target.class == 'windows')
+
+lib{sdl3}: \
+  video/windows/{h c}{*} \
+  audio/wasapi/{h c}{*} \
+  audio/directsound/{h c}{*} \
+  core/windows/{h c}{*} \
+  filesystem/windows/{h c}{*} \
+  joystick/windows/{h c}{*} \
+  haptic/windows/{h c}{*} \
+  locale/windows/{h c}{*} \
+  misc/windows/{h c}{*} \
+  power/windows/{h c}{*} \
+  thread/windows/{h c}{*} \
+  thread/generic/{h c}{*} \
+  time/windows/{h c}{*} \
+  timer/windows/{h c}{*} \
+  loadso/windows/{h c}{*} \
+  main/windows/{h c}{*} \
+  process/windows/{h c}{*} \
+  dialog/windows/{h c}{*} \
+  tray/windows/{h c}{*} \
+  camera/mediafoundation/{h c}{*} \
+  sensor/windows/{h c}{*} \
+  render/direct3d/{h c}{*} \
+  render/direct3d11/{h c}{*} \
+  render/direct3d12/{h c}{*} \
+  gpu/d3d11/{h c}{*} \
+  gpu/d3d12/{h c}{*} \
+  hidapi/windows/{h c}{*} \
+  io/windows/{h c}{*}: include = $windows
+
+lib{sdl3}: $impl_libs $intf_libs
+
+# --- private generated SDL_build_config.h ---
+#
+# Bootstrap: materialize upstream static platform configs as the private
+# generated header (USING_GENERATED_CONFIG_H). Replace with full autoconf
+# processing of SDL_build_config.h.cmake as the feature map matures.
+#
+cfg_in =
+switch $c.target.class
+{
+  case 'macos'
+    cfg_in = [path] $src_root/include/build_config/SDL_build_config_macos.h
+  case 'windows'
+    cfg_in = [path] $src_root/include/build_config/SDL_build_config_windows.h
+  default
+    cfg_in = [path] $src_root/include/build_config/SDL_build_config_minimal.h
+}
+
+h{build_config/SDL_build_config}:
+{{
+  diag gen $>
+  cp "$cfg_in" $path($>)
+}}
+
+lib{sdl3}: h{build_config/SDL_build_config}
 
 # Build options.
 #
@@ -22,12 +205,43 @@ out_pfx_inc = [dir_path] $out_root/include/
 src_pfx_inc = [dir_path] $src_root/include/
 out_pfx_src = [dir_path] $out_root/src/
 src_pfx_src = [dir_path] $src_root/src/
+out_pfx_cfg = [dir_path] $out_root/src/build_config/
 
-c.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
-              "-I$out_pfx_inc" "-I$src_pfx_inc"
+c.poptions =+ "-I$out_pfx_cfg" "-I$out_pfx_src" "-I$src_pfx_src" \
+              "-I$out_pfx_inc" "-I$src_pfx_inc" \
+              "-I$src_pfx_src/video/khronos" \
+              -DUSING_GENERATED_CONFIG_H \
+              -D_GNU_SOURCE=1
 
-#obja{*}: c.poptions += -DSDL3_STATIC_BUILD
-#objs{*}: c.poptions += -DSDL3_SHARED_BUILD
+# Apple frameworks (match upstream CMake link line on macOS).
+#
+if ($c.target.class == 'macos')
+{
+  # Upstream requires Objective-C ARC for Cocoa backends.
+  #
+  c.coptions += -fobjc-arc
+
+  c.libs += -framework CoreMedia -framework CoreVideo -framework Cocoa \
+            -framework IOKit -framework ForceFeedback -framework Carbon \
+            -framework CoreAudio -framework AudioToolbox -framework AVFoundation \
+            -framework Foundation -framework GameController -framework Metal \
+            -framework QuartzCore \
+            -weak_framework CoreHaptics -weak_framework UniformTypeIdentifiers \
+            -lpthread -lm
+}
+
+if ($c.target.class == 'linux' || $c.target.class == 'bsd')
+  c.libs += -lpthread -lm -ldl
+
+if ($c.target.class == 'windows')
+{
+  if ($c.target.system == 'mingw32')
+    c.libs += -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 \
+              -lversion -luuid -ladvapi32 -lsetupapi -lshell32
+  else
+    c.libs += user32.lib gdi32.lib winmm.lib imm32.lib ole32.lib oleaut32.lib \
+              version.lib uuid.lib advapi32.lib setupapi.lib shell32.lib
+}
 
 # Export options.
 #
@@ -37,13 +251,6 @@ lib{sdl3}:
   c.export.libs = $intf_libs
 }
 
-#liba{sdl3}: c.export.poptions += -DSDL3_STATIC
-#libs{sdl3}: c.export.poptions += -DSDL3_SHARED
-
-# For pre-releases use the complete version to make sure they cannot
-# be used in place of another pre-release or the final version. See
-# the version module for details on the version.* variable values.
-#
 if $version.pre_release
   lib{sdl3}: bin.lib.version = "-$version.project_id"
 else

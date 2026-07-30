@@ -3,9 +3,11 @@
 #c.internal.scope = current
 
 using c
+using c.objc
 
 h{*}: extension = h
 c{*}: extension = c
+m{*}: extension = m
 
 # The test target for cross-testing (running tests under Wine, etc).
 #
