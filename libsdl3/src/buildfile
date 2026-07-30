@@ -190,31 +190,43 @@ lib{sdl3}: \
   hidapi/netbsd/c{hid} \
   thread/generic/c{SDL_syssem}: include = adhoc
 
-# --- private generated SDL_build_config.h ---
+# --- private generated SDL_build_config.h (libbuild2-autoconf) ---
 #
-# Bootstrap: materialize upstream static platform configs as the private
-# generated header (USING_GENERATED_CONFIG_H). Replace with full autoconf
-# processing of SDL_build_config.h.cmake as the feature map matures.
+# Process upstream's CMake template with the autoconf module (cmake flavor).
+# Platform capability/feature maps live in config/subs-*.build and are applied
+# via autoconf.substitutions (no static SDL_build_config_<platform>.h copies).
 #
-cfg_in =
+using autoconf
+
 switch $c.target.class
 {
   case 'macos'
-    cfg_in = [path] $src_root/include/build_config/SDL_build_config_macos.h
+    source $src_base/config/subs-macos.build
+
   case 'windows'
-    cfg_in = [path] $src_root/include/build_config/SDL_build_config_windows.h
+    source $src_base/config/subs-windows.build
+
+  case 'linux'
+  case 'bsd'
+    source $src_base/config/subs-linux.build
+
   default
-    cfg_in = [path] $src_root/include/build_config/SDL_build_config_minimal.h
+    source $src_base/config/subs-linux.build
 }
 
-h{build_config/SDL_build_config}: fsdir{build_config}
-{{
-  diag gen $>
-  cp "$cfg_in" $path($>)
-}}
+# Platform substitution maps (all of them must ship in the source package).
+#
+./: file{config/**}
+
+h{build_config/SDL_build_config}: \
+  fsdir{build_config} \
+  ../include/build_config/in{SDL_build_config.h.cmake}
+{
+  autoconf.flavor = cmake
+  autoconf.substitutions = $config_subs
+}
 
 lib{sdl3}: h{build_config/SDL_build_config}
-
 # Build options.
 #
 out_pfx_inc = [dir_path] $out_root/include/

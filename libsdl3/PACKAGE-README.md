@@ -39,10 +39,11 @@ The shared and static variants follow the normal `build2` `bin.lib` selection.
 
 ## Configuration notes
 
-- Private `SDL_build_config.h` is generated at build time
-  (`USING_GENERATED_CONFIG_H`). Bootstrap currently materializes upstream
-  static platform configs (macOS / Windows / minimal). A full
-  `SDL_build_config.h.cmake` + `autoconf` feature map is planned.
+- Private `SDL_build_config.h` is generated at build time with the build2
+  `autoconf` module from upstream `SDL_build_config.h.cmake` (cmake flavor)
+  and per-platform `autoconf.substitutions` maps in `src/config/subs-*.build`.
+  The build defines `USING_GENERATED_CONFIG_H` and does not use static
+  `SDL_build_config_<platform>.h` copies.
 - Optional OS stacks (X11, Wayland, ALSA, Pulse, etc.) are primarily used via
   upstream's dlopen path where configured. Prefer existing cppget `*-meta`
   packages (for example `libvulkan-meta`, `libopengl-meta`) when hard-linking
