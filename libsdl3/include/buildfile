@@ -1,11 +1,17 @@
-pub_hdrs = h{**}
+# Public headers under SDL3/.
+#
+pub_hdrs = SDL3/h{**}
 
 ./: $pub_hdrs
 
-# Install recreating subdirectories.
+# Install into include/SDL3/ (headers already live in SDL3/ subdir of prefix).
 #
-h{*}:
+SDL3/h{*}:
 {
-  install         = include/
+  install         = include/SDL3/
   install.subdirs = true
 }
+
+# Private build_config (templates / static platform configs). Not installed.
+#
+build_config/: install = false
