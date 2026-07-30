@@ -1,15 +1,19 @@
 : 1
 name: libsdl3
-version: 0.1.0-a.0.z
+version: 3.4.12-a.0.z
 language: c
-project: sdl
-summary: sdl3 C library
-license: other: proprietary ; Not free/open source.
+project: SDL
+summary: cross-platform multimedia C library
+license: Zlib
+topics: multimedia, games, graphics, audio, input
 description-file: README.md
 package-description-file: PACKAGE-README.md
-url: https://example.org/upstream
-email: upstream@example.org
-package-url: https://github.com/build2-packaging/sdl
+changes-file: WhatsNew.txt
+url: https://www.libsdl.org/
+doc-url: https://wiki.libsdl.org/
+src-url: https://github.com/libsdl-org/SDL
+email: slouken@libsdl.org
+package-url: https://github.com/build2-packaging/SDL
 package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
