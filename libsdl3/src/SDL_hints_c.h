@@ -1,0 +1,1 @@
+../../upstream/src/SDL_hints_c.h
