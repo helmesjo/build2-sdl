@@ -1,41 +1,30 @@
-intf_libs = # Interface dependencies.
-impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+# SDL3_test static helper (headers are public in libsdl3: <SDL3/SDL_test*.h>).
+#
 
-lib{sdl3-tests}: {h c}{**} $impl_libs $intf_libs
+import intf_libs = libsdl3%lib{sdl3}
 
-# Build options.
+# Static-only matches upstream (SDL3_test is always a static archive).
+#
+lib{sdl3-test}: bin.lib = static
+
+lib{sdl3-test}: {h c}{*} $intf_libs
+
+# Headers from libsdl3 (interface). Private internal header not installed.
 #
 c.poptions =+ "-I$out_root" "-I$src_root"
 
-#obja{*}: c.poptions += -DSDL3_TEST_STATIC_BUILD
-#objs{*}: c.poptions += -DSDL3_TEST_SHARED_BUILD
-
-# Export options.
-#
-lib{sdl3-tests}:
+lib{sdl3-test}:
 {
-  c.export.poptions = "-I$out_root" "-I$src_root"
+  c.export.poptions =
   c.export.libs = $intf_libs
 }
 
-#liba{sdl3-tests}: c.export.poptions += -DSDL3_TEST_STATIC
-#libs{sdl3-tests}: c.export.poptions += -DSDL3_TEST_SHARED
-
-# For pre-releases use the complete version to make sure they cannot
-# be used in place of another pre-release or the final version. See
-# the version module for details on the version.* variable values.
-#
 if $version.pre_release
-  lib{sdl3-tests}: bin.lib.version = "-$version.project_id"
+  lib{sdl3-test}: bin.lib.version = "-$version.project_id"
 else
-  lib{sdl3-tests}: bin.lib.version = "-$version.major.$version.minor"
+  lib{sdl3-test}: bin.lib.version = "-$version.major.$version.minor"
 
-# Install into the sdl3-test/ subdirectory of, say, /usr/include/
-# recreating subdirectories.
+# No install of private implementation header. Public SDL_test*.h live in
+# libsdl3.
 #
-h{*}:
-{
-  install         = include/sdl3-test/
-  install.subdirs = true
-}
+h{*}: install = false
