@@ -214,7 +214,7 @@ switch $c.target.class
     source $src_base/config/subs-linux.build
 }
 
-# Platform substitution maps (all of them must ship in the source package).
+# Platform substitution maps and probe helpers (must all ship in dist).
 #
 ./: file{config/**}
 
@@ -226,7 +226,13 @@ h{build_config/SDL_build_config}: \
   autoconf.substitutions = $config_subs
 }
 
+# HAVE_* that correspond to system headers: probe with $c.find_system_header()
+# as target-specific variables (not listed in config_subs, so they apply).
+#
+source $src_base/config/apply-system-header-probes.build
+
 lib{sdl3}: h{build_config/SDL_build_config}
+
 # Build options.
 #
 out_pfx_inc = [dir_path] $out_root/include/

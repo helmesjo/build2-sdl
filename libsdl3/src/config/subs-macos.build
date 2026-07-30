@@ -6,7 +6,6 @@ config_subs = \
   HAVE_ABS@true \
   HAVE_ACOS@true \
   HAVE_ACOSF@true \
-  HAVE_ALLOCA_H@true \
   HAVE_ASIN@true \
   HAVE_ASINF@true \
   HAVE_ATAN@true \
@@ -23,14 +22,7 @@ config_subs = \
   HAVE_COPYSIGNF@true \
   HAVE_COS@true \
   HAVE_COSF@true \
-  HAVE_DBUS_DBUS_H@false \
-  HAVE_DDRAW_H@false \
-  HAVE_DINPUT_H@false \
   HAVE_DLOPEN@true \
-  HAVE_DSOUND_H@false \
-  HAVE_DXGI1_5_H@false \
-  HAVE_DXGI1_6_H@false \
-  HAVE_DXGI_H@false \
   HAVE_ELF_AUX_INFO@false \
   HAVE_EXP@true \
   HAVE_EXPF@true \
@@ -38,16 +30,13 @@ config_subs = \
   HAVE_FABSF@true \
   HAVE_FCITX@false \
   HAVE_FDATASYNC@false \
-  HAVE_FLOAT_H@true \
   HAVE_FLOOR@true \
   HAVE_FLOORF@true \
   HAVE_FMOD@true \
   HAVE_FMODF@true \
   HAVE_FOPEN64@false \
-  HAVE_FRIBIDI_H@false \
   HAVE_FSEEKO@true \
   HAVE_FSEEKO64@false \
-  HAVE_GAMEINPUT_H@false \
   HAVE_GCC_ATOMICS@true \
   HAVE_GCC_SYNC_LOCK_TEST_AND_SET@false \
   HAVE_GETAUXVAL@false \
@@ -57,13 +46,9 @@ config_subs = \
   HAVE_GETRESGID@false \
   HAVE_GETRESUID@false \
   HAVE_GMTIME_R@true \
-  HAVE_IBUS_IBUS_H@false \
   HAVE_ICONV@false \
-  HAVE_ICONV_H@true \
   HAVE_INDEX@true \
-  HAVE_INOTIFY@false \
   HAVE_INOTIFY_INIT1@false \
-  HAVE_INTTYPES_H@true \
   HAVE_ISINF@true \
   HAVE_ISINFF@false \
   HAVE_ISINF_FLOAT_MACRO@true \
@@ -72,13 +57,6 @@ config_subs = \
   HAVE_ISNAN_FLOAT_MACRO@true \
   HAVE_ITOA@false \
   HAVE_LIBC@true \
-  HAVE_LIBDECOR_H@false \
-  HAVE_LIBTHAI_H@false \
-  HAVE_LIBUDEV_H@false \
-  HAVE_LIBURING_H@false \
-  HAVE_LIBUSB@false \
-  HAVE_LIMITS_H@true \
-  HAVE_LINUX_INPUT_H@false \
   HAVE_LOCALTIME_R@true \
   HAVE_LOG@true \
   HAVE_LOG10@true \
@@ -87,15 +65,11 @@ config_subs = \
   HAVE_LROUND@true \
   HAVE_LROUNDF@true \
   HAVE_MALLOC@true \
-  HAVE_MALLOC_H@false \
-  HAVE_MATH_H@true \
   HAVE_MEMCMP@true \
   HAVE_MEMCPY@true \
   HAVE_MEMFD_CREATE@false \
   HAVE_MEMMOVE@true \
-  HAVE_MEMORY_H@true \
   HAVE_MEMSET@true \
-  HAVE_MMDEVICEAPI_H@false \
   HAVE_MODF@true \
   HAVE_MODFF@true \
   HAVE_NANOSLEEP@true \
@@ -107,12 +81,10 @@ config_subs = \
   HAVE_POW@true \
   HAVE_POWF@true \
   HAVE_PPOLL@false \
-  HAVE_PTHREAD_NP_H@false \
   HAVE_PTHREAD_SETNAME_NP@true \
   HAVE_PTHREAD_SET_NAME_NP@false \
   HAVE_PUTENV@true \
   HAVE_RINDEX@true \
-  HAVE_ROAPI_H@false \
   HAVE_ROUND@true \
   HAVE_ROUNDF@true \
   HAVE_SA_SIGACTION@false \
@@ -121,23 +93,14 @@ config_subs = \
   HAVE_SEM_TIMEDWAIT@false \
   HAVE_SETENV@true \
   HAVE_SETJMP@true \
-  HAVE_SHELLSCALINGAPI_H@false \
   HAVE_SIGACTION@true \
-  HAVE_SIGNAL_H@true \
   HAVE_SIGTIMEDWAIT@false \
   HAVE_SIN@true \
   HAVE_SINF@true \
   HAVE_SQRT@true \
   HAVE_SQRTF@true \
-  HAVE_STDARG_H@true \
-  HAVE_STDDEF_H@true \
-  HAVE_STDINT_H@true \
-  HAVE_STDIO_H@true \
-  HAVE_STDLIB_H@true \
   HAVE_STRCHR@true \
   HAVE_STRCMP@true \
-  HAVE_STRINGS_H@true \
-  HAVE_STRING_H@true \
   HAVE_STRLCAT@true \
   HAVE_STRLCPY@true \
   HAVE_STRLEN@true \
@@ -156,16 +119,13 @@ config_subs = \
   HAVE_ST_MTIM@false \
   HAVE_SYSCONF@true \
   HAVE_SYSCTLBYNAME@true \
-  HAVE_SYS_TYPES_H@true \
   HAVE_TAN@true \
   HAVE_TANF@true \
-  HAVE_TPCSHRD_H@false \
   HAVE_TRUNC@true \
   HAVE_TRUNCF@true \
   HAVE_UNSETENV@true \
   HAVE_VSNPRINTF@true \
   HAVE_VSSCANF@true \
-  HAVE_WCHAR_H@true \
   HAVE_WCSCMP@true \
   HAVE_WCSLCAT@true \
   HAVE_WCSLCPY@true \
@@ -174,8 +134,6 @@ config_subs = \
   HAVE_WCSNLEN@true \
   HAVE_WCSSTR@true \
   HAVE_WCSTOL@true \
-  HAVE_WINDOWS_GAMING_INPUT_H@false \
-  HAVE_XINPUT_H@false \
   HAVE__COPYSIGN@false \
   HAVE__EXIT@true \
   HAVE__FSEEKI64@false \

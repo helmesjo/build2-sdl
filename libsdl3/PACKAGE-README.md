@@ -40,8 +40,10 @@ The shared and static variants follow the normal `build2` `bin.lib` selection.
 ## Configuration notes
 
 - Private `SDL_build_config.h` is generated at build time with the build2
-  `autoconf` module from upstream `SDL_build_config.h.cmake` (cmake flavor)
-  and per-platform `autoconf.substitutions` maps in `src/config/subs-*.build`.
+  `autoconf` module from upstream `SDL_build_config.h.cmake` (cmake flavor).
+  Per-platform feature maps live in `src/config/subs-*.build`
+  (`autoconf.substitutions`). Header-backed `HAVE_*` flags are probed with
+  `$c.find_system_header()` in `src/config/apply-system-header-probes.build`.
   The build defines `USING_GENERATED_CONFIG_H` and does not use static
   `SDL_build_config_<platform>.h` copies.
 - Optional OS stacks (X11, Wayland, ALSA, Pulse, etc.) are primarily used via

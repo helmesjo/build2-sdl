@@ -1,0 +1,60 @@
+# System-header probes via $c.find_system_header().
+# Applied as target-specific variables on h{build_config/SDL_build_config}
+# so they win only when not forced via autoconf.substitutions (we omit them
+# from the subs-*.build maps).
+#
+# Lookup: ($c.find_system_header("path") != [null])
+
+h{build_config/SDL_build_config}:
+{
+  HAVE_ALLOCA_H = ($c.find_system_header("alloca.h") != [null])
+  HAVE_DBUS_DBUS_H = ($c.find_system_header("dbus/dbus.h") != [null])
+  HAVE_DDRAW_H = ($c.find_system_header("ddraw.h") != [null])
+  HAVE_DINPUT_H = ($c.find_system_header("dinput.h") != [null])
+  HAVE_DSOUND_H = ($c.find_system_header("dsound.h") != [null])
+  HAVE_DXGI1_5_H = ($c.find_system_header("dxgi1_5.h") != [null])
+  HAVE_DXGI1_6_H = ($c.find_system_header("dxgi1_6.h") != [null])
+  HAVE_DXGI_H = ($c.find_system_header("dxgi.h") != [null])
+  HAVE_FLOAT_H = ($c.find_system_header("float.h") != [null])
+  HAVE_FRIBIDI_H = ($c.find_system_header("fribidi.h") != [null])
+  HAVE_GAMEINPUT_H = ($c.find_system_header("gameinput.h") != [null])
+  HAVE_IBUS_IBUS_H = \
+    ($c.find_system_header("ibus-1.0/ibus.h") != [null] || \
+     $c.find_system_header("ibus.h") != [null])
+  HAVE_ICONV_H = ($c.find_system_header("iconv.h") != [null])
+  HAVE_INOTIFY = ($c.find_system_header("sys/inotify.h") != [null])
+  HAVE_INTTYPES_H = ($c.find_system_header("inttypes.h") != [null])
+  HAVE_LIBDECOR_H = \
+    ($c.find_system_header("libdecor-0/libdecor.h") != [null] || \
+     $c.find_system_header("libdecor.h") != [null])
+  HAVE_LIBTHAI_H = ($c.find_system_header("thai/thwchar.h") != [null])
+  HAVE_LIBUDEV_H = ($c.find_system_header("libudev.h") != [null])
+  HAVE_LIBURING_H = ($c.find_system_header("liburing.h") != [null])
+  # libusb may be libusb-1.0/libusb.h or libusb.h
+  HAVE_LIBUSB = \
+    ($c.find_system_header("libusb-1.0/libusb.h") != [null] || \
+     $c.find_system_header("libusb.h") != [null])
+  HAVE_LIMITS_H = ($c.find_system_header("limits.h") != [null])
+  HAVE_LINUX_INPUT_H = ($c.find_system_header("linux/input.h") != [null])
+  HAVE_MALLOC_H = ($c.find_system_header("malloc.h") != [null])
+  HAVE_MATH_H = ($c.find_system_header("math.h") != [null])
+  HAVE_MEMORY_H = ($c.find_system_header("memory.h") != [null])
+  HAVE_MMDEVICEAPI_H = ($c.find_system_header("mmdeviceapi.h") != [null])
+  HAVE_PTHREAD_NP_H = ($c.find_system_header("pthread_np.h") != [null])
+  HAVE_ROAPI_H = ($c.find_system_header("roapi.h") != [null])
+  HAVE_SHELLSCALINGAPI_H = ($c.find_system_header("shellscalingapi.h") != [null])
+  HAVE_SIGNAL_H = ($c.find_system_header("signal.h") != [null])
+  HAVE_STDARG_H = ($c.find_system_header("stdarg.h") != [null])
+  HAVE_STDDEF_H = ($c.find_system_header("stddef.h") != [null])
+  HAVE_STDINT_H = ($c.find_system_header("stdint.h") != [null])
+  HAVE_STDIO_H = ($c.find_system_header("stdio.h") != [null])
+  HAVE_STDLIB_H = ($c.find_system_header("stdlib.h") != [null])
+  HAVE_STRINGS_H = ($c.find_system_header("strings.h") != [null])
+  HAVE_STRING_H = ($c.find_system_header("string.h") != [null])
+  HAVE_SYS_TYPES_H = ($c.find_system_header("sys/types.h") != [null])
+  HAVE_TPCSHRD_H = ($c.find_system_header("tpcshrd.h") != [null])
+  HAVE_WCHAR_H = ($c.find_system_header("wchar.h") != [null])
+  HAVE_WINDOWS_GAMING_INPUT_H = ($c.find_system_header("windows.gaming.input.h") != [null])
+  HAVE_XINPUT_H = ($c.find_system_header("xinput.h") != [null])
+}
+
