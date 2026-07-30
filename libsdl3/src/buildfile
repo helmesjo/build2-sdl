@@ -193,8 +193,15 @@ lib{sdl3}: \
 # --- private generated SDL_build_config.h (libbuild2-autoconf) ---
 #
 # Process upstream's CMake template with the autoconf module (cmake flavor).
-# Platform capability/feature maps live in config/subs-*.build and are applied
-# via autoconf.substitutions (no static SDL_build_config_<platform>.h copies).
+#
+# Resolution order for each #cmakedefine name (module default):
+#   1. autoconf.substitutions -- platform feature maps (SDL_* drivers, etc.)
+#   2. target-specific variables -- optional package header probes
+#   3. project checks in build/autoconf/checks/
+#   4. libbuild2-autoconf builtin checks
+#
+# HAVE_* for libc/compiler features are never hardcoded in the maps. They come
+# from (3)/(4), with (2) only for optional third-party headers.
 #
 using autoconf
 
@@ -226,8 +233,7 @@ h{build_config/SDL_build_config}: \
   autoconf.substitutions = $config_subs
 }
 
-# HAVE_* that correspond to system headers: probe with $c.find_system_header()
-# as target-specific variables (not listed in config_subs, so they apply).
+# Optional package headers only (see file for the list).
 #
 source $src_base/config/apply-system-header-probes.build
 

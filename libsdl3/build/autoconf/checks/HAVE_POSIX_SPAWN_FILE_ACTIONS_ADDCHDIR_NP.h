@@ -1,0 +1,14 @@
+// HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR_NP : BUILD2_AUTOCONF_LIBC_VERSION
+
+#ifndef BUILD2_AUTOCONF_LIBC_VERSION
+#  error BUILD2_AUTOCONF_LIBC_VERSION appears to be conditionally included
+#endif
+
+#undef HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR_NP
+
+/* Check for posix_spawn_file_actions_addchdir_np(). Non-portable. Mac OS and some BSD.
+ */
+#if BUILD2_AUTOCONF_MACOS_PREREQ(10, 15) || \
+    BUILD2_AUTOCONF_FREEBSD_PREREQ(13, 0)
+#  define HAVE_POSIX_SPAWN_FILE_ACTIONS_ADDCHDIR_NP 1
+#endif
