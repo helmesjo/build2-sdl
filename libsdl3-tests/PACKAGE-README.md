@@ -1,42 +1,41 @@
-# libsdl3-tests - A C library
+# libsdl3-tests
 
-This is a `build2` package for the [`<UPSTREAM-NAME>`](https://<UPSTREAM-URL>)
-C library. It provides <SUMMARY-OF-FUNCTIONALITY>.
+`build2` test package for [libsdl3](https://www.libsdl.org/). It provides:
+
+- `lib{sdl3-test}` -- static SDL_test helper (upstream `SDL3_test`)
+- `exe{testautomation}` -- upstream noninteractive automation suite
+
+Public test headers remain in `libsdl3` as `<SDL3/SDL_test*.h>`.
 
 
 ## Usage
 
-To start using `libsdl3-tests` in your project, add the following `depends`
-value to your `manifest`, adjusting the version constraint as appropriate:
+Pulled in automatically when testing `libsdl3` via the `tests:` manifest
+field. You can also depend on it explicitly:
 
 ```
-depends: libsdl3-tests ^<VERSION>
+depends: libsdl3-tests == $
 ```
 
-Then import the library in your `buildfile`:
+Import the helper library:
 
 ```
-import libs = libsdl3-tests%lib{<TARGET>}
+import test_libs = libsdl3-tests%lib{sdl3-test}
 ```
 
 
-## Importable targets
-
-This package provides the following importable targets:
+## Running tests
 
 ```
-lib{<TARGET>}
+bdep test -d libsdl3
 ```
 
-<DESCRIPTION-OF-IMPORTABLE-TARGETS>
+`testautomation` is run with `SDL_VIDEODRIVER=dummy` and
+`SDL_AUDIODRIVER=dummy`, with a 120s timeout treated as success (matches
+upstream noninteractive timeout).
 
 
-## Configuration variables
+## License
 
-This package provides the following configuration variables:
-
-```
-[bool] config.libsdl3_tests.<VARIABLE> ?= false
-```
-
-<DESCRIPTION-OF-CONFIG-VARIABLES>
+zlib for the packaging overlay. Upstream `test/LICENSE.txt` is more
+permissive for some test sources (see `TEST-LICENSE.txt`).

@@ -12,7 +12,7 @@ For consumers, see [`libsdl3/PACKAGE-README.md`](libsdl3/PACKAGE-README.md).
 | Package | Status | Description |
 |---------|--------|-------------|
 | `libsdl3` | active | Core SDL3 library |
-| `libsdl3-tests` | planned | `SDL_test` helper and selected upstream tests |
+| `libsdl3-tests` | active | `lib{sdl3-test}` helper and `testautomation` |
 | `sdl3-examples` | planned | Optional examples |
 
 Upstream is a git submodule at `upstream/` (currently `release-3.4.12`).
