@@ -174,6 +174,22 @@ lib{sdl3}: \
 
 lib{sdl3}: $impl_libs $intf_libs
 
+# Private headers and #include'd sources. Must be in the dependency graph so
+# `b dist` packages them (in-repo symlinks otherwise hide the gap).
+#
+lib{sdl3}: h{**}: include = adhoc
+
+# .c files that are #include'd rather than compiled as separate TUs.
+#
+lib{sdl3}: \
+  hidapi/mac/c{hid} \
+  hidapi/linux/c{hid} \
+  hidapi/windows/c{hid} \
+  hidapi/windows/c{hidapi_descriptor_reconstruct} \
+  hidapi/libusb/c{hid} \
+  hidapi/netbsd/c{hid} \
+  thread/generic/c{SDL_syssem}: include = adhoc
+
 # --- private generated SDL_build_config.h ---
 #
 # Bootstrap: materialize upstream static platform configs as the private
@@ -191,7 +207,7 @@ switch $c.target.class
     cfg_in = [path] $src_root/include/build_config/SDL_build_config_minimal.h
 }
 
-h{build_config/SDL_build_config}:
+h{build_config/SDL_build_config}: fsdir{build_config}
 {{
   diag gen $>
   cp "$cfg_in" $path($>)

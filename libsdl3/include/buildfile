@@ -2,7 +2,13 @@
 #
 pub_hdrs = SDL3/h{**}
 
-./: $pub_hdrs
+# Private build_config: templates and static platform configs. Distributed
+# with the package (needed to generate the private config header) but not
+# installed for consumers.
+#
+priv_cfg = build_config/file{**}
+
+./: $pub_hdrs $priv_cfg
 
 # Install into include/SDL3/ (headers already live in SDL3/ subdir of prefix).
 #
@@ -12,6 +18,4 @@ SDL3/h{*}:
   install.subdirs = true
 }
 
-# Private build_config (templates / static platform configs). Not installed.
-#
-build_config/: install = false
+build_config/file{*}: install = false
