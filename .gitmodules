@@ -1,0 +1,4 @@
+[submodule "upstream"]
+	path = upstream
+	url = https://github.com/libsdl-org/SDL.git
+	ignore = dirty
