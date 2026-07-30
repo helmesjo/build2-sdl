@@ -16,5 +16,3 @@ package-url: https://github.com/build2-packaging/SDL
 package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
-# Implied by libsdl3's tests: field, kept explicit for local clarity.
-depends: libsdl3 == $
