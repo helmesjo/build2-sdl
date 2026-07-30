@@ -6,40 +6,48 @@ upstream `include/build_config/SDL_build_config.h.cmake` (cmake flavor).
 Lookup order for each `#cmakedefine` name:
 
 1. `autoconf.substitutions` from the platform map (`config/subs-*.build`)
-2. Target-specific variables (optional package header probes)
+2. Target-specific variables (optional package headers and system-lib drivers)
 3. Project checks in `build/autoconf/checks/`
 4. Builtin checks from libbuild2-autoconf
 
 ## Platform maps (`subs-*.build`)
 
 Each file defines `config_subs` as `NAME@true|false|value` pairs. These cover
-only non-check names: `SDL_*` drivers and features, `DYNAPI_*`, `USE_*`, and
-string/version substitutions. **No `HAVE_*` capability bits** live here.
+portable / platform-core flags: Cocoa vs Win32 vs Unix filesystem, dummy
+drivers, GPU backends that use bundled headers, etc.
 
-| File | Role |
-|------|------|
-| `subs-macos.build` | Cocoa/CoreAudio/Metal and related macOS feature map |
-| `subs-windows.build` | Win32/WASAPI/D3D feature map |
-| `subs-linux.build` | X11/Wayland/ALSA/Pulse and related Linux feature map |
+**Not** in the maps:
+
+- `HAVE_*` (autoconf checks / optional header probes)
+- Optional system-lib drivers (X11, ALSA, Pulse, KMS/DRM, ...) -- see feature
+  probes below
 
 ## Project checks (`build/autoconf/checks/`)
 
 Libc functions, standard headers, compiler builtins, and Windows SDK headers
-that can be decided from target/platform knowledge are project checks (same
-format as the libbuild2-autoconf builtin catalog). Names that already exist
-as builtins are not duplicated here.
+that can be decided from target/platform knowledge.
 
-## Optional package probes (`apply-system-header-probes.build`)
+## Optional package header probes (`apply-system-header-probes.build`)
 
-Headers whose presence depends on optional installed packages (dbus, fribidi,
-libusb, libudev, liburing, libdecor, ibus, libthai, iconv, linux/input.h) are
-probed with:
+Headers for optional installed packages (dbus, fribidi, libusb, libudev,
+liburing, libdecor, ibus, libthai, iconv, linux/input.h) via:
 
 ```
 ($c.find_system_header("path/to/header.h") != [null])
 ```
 
-That is the C module function `$c.find_system_header(<name>)` (path or `null`).
+## Optional system-lib drivers (`apply-system-feature-probes.build`)
 
-Regenerate platform maps when upgrading upstream if driver/feature defaults
-change. Prefer new project checks (or builtins) for any additional `HAVE_*`.
+`SDL_*` drivers that need OS packages default from the same header lookup.
+When enabled, DYNAMIC SONAME strings prefer dlopen (no hard link to that
+lib). Wayland stays off until protocol generation is wired.
+
+CI manifests install matching `-dev` packages on Debian/Fedora bots so these
+probes succeed and exercise more backends. Bare toolchains still build with
+dummy/offscreen paths.
+
+## CI
+
+See `libsdl3/manifest` (`builds` / `*-build-config` / `sys:`). Tests package
+mirrors the same matrix. Runtime tests use `SDL_VIDEODRIVER=dummy` and
+`SDL_AUDIODRIVER=dummy` (no GPU or display required).

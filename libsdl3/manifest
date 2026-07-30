@@ -18,3 +18,93 @@ package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
 tests: libsdl3-tests == $
+
+# CI configuration
+#
+# Optional Linux drivers (X11, ALSA, Pulse, PipeWire, KMS/DRM, ...) are enabled
+# only when the corresponding system headers are visible to the toolchain
+# ($c.find_system_header). Bare default Linux bots therefore still build with
+# dummy/offscreen paths. Named sys configurations install -dev packages so CI
+# exercises as many drivers as this package currently supports.
+#
+# Wayland is not enabled yet (needs wayland-scanner protocol generation).
+# FreeBSD is not yet validated for this packaging.
+#
+
+builds: -freebsd
+builds: -linux
+builds: -macos
+builds: -windows
+builds: -bindist
+
+# macOS: Apple frameworks from Xcode/CLT only. No extra sys: packages.
+#
+macos-clang-builds: macos
+macos-clang-build-include: macos_*-clang
+macos-clang-build-exclude: **
+
+# Windows: Win32 / WASAPI / Direct3D via the stock Windows SDK (MSVC bots).
+#
+windows-msvc-builds: windows
+windows-msvc-build-include: windows*-msvc**
+windows-msvc-build-exclude: **
+
+# Debian/Ubuntu: install multimedia -dev packages so header probes succeed.
+# Package names are distro names (see bpkg system package manager).
+#
+debian-builds: sys
+debian-builds: -static
+debian-builds: -bindist
+debian-build-include: linux_debian*-**
+debian-build-include: linux_ubuntu*-**
+debian-build-exclude: **
+debian-build-config:
+\
+sys:libx11-dev
+sys:libxext-dev
+sys:libxcursor-dev
+sys:libxi-dev
+sys:libxfixes-dev
+sys:libxrandr-dev
+sys:libxss-dev
+sys:libxtst-dev
+sys:libxkbcommon-dev
+sys:libgl-dev
+sys:libasound2-dev
+sys:libpulse-dev
+sys:libpipewire-0.3-dev
+sys:libdrm-dev
+sys:libgbm-dev
+sys:libudev-dev
+sys:libdbus-1-dev
+sys:libusb-1.0-0-dev
+\
+
+# Fedora/RHEL-alike: same intent with Fedora package names.
+#
+fedora-builds: sys
+fedora-builds: -static
+fedora-builds: -bindist
+fedora-build-include: linux_fedora*-**
+fedora-build-exclude: **
+fedora-build-config:
+\
+sys:libX11-devel
+sys:libXext-devel
+sys:libXcursor-devel
+sys:libXi-devel
+sys:libXfixes-devel
+sys:libXrandr-devel
+sys:libXScrnSaver-devel
+sys:libXtst-devel
+sys:libxkbcommon-devel
+sys:mesa-libGL-devel
+sys:alsa-lib-devel
+sys:pulseaudio-libs-devel
+sys:pipewire-devel
+sys:libdrm-devel
+sys:mesa-libgbm-devel
+sys:systemd-devel
+sys:dbus-devel
+sys:libusb1-devel
+\

@@ -16,3 +16,79 @@ package-url: https://github.com/build2-packaging/SDL
 package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
+
+# CI configuration (keep aligned with libsdl3).
+#
+# Tests use SDL_VIDEODRIVER=dummy and SDL_AUDIODRIVER=dummy (no GPU/display).
+# Same build matrix as the primary package so bots that build libsdl3 also run
+# testautomation.
+#
+
+builds: -freebsd
+builds: -linux
+builds: -macos
+builds: -windows
+builds: -bindist
+
+macos-clang-builds: macos
+macos-clang-build-include: macos_*-clang
+macos-clang-build-exclude: **
+
+windows-msvc-builds: windows
+windows-msvc-build-include: windows*-msvc**
+windows-msvc-build-exclude: **
+
+debian-builds: sys
+debian-builds: -static
+debian-builds: -bindist
+debian-build-include: linux_debian*-**
+debian-build-include: linux_ubuntu*-**
+debian-build-exclude: **
+debian-build-config:
+\
+sys:libx11-dev
+sys:libxext-dev
+sys:libxcursor-dev
+sys:libxi-dev
+sys:libxfixes-dev
+sys:libxrandr-dev
+sys:libxss-dev
+sys:libxtst-dev
+sys:libxkbcommon-dev
+sys:libgl-dev
+sys:libasound2-dev
+sys:libpulse-dev
+sys:libpipewire-0.3-dev
+sys:libdrm-dev
+sys:libgbm-dev
+sys:libudev-dev
+sys:libdbus-1-dev
+sys:libusb-1.0-0-dev
+\
+
+fedora-builds: sys
+fedora-builds: -static
+fedora-builds: -bindist
+fedora-build-include: linux_fedora*-**
+fedora-build-exclude: **
+fedora-build-config:
+\
+sys:libX11-devel
+sys:libXext-devel
+sys:libXcursor-devel
+sys:libXi-devel
+sys:libXfixes-devel
+sys:libXrandr-devel
+sys:libXScrnSaver-devel
+sys:libXtst-devel
+sys:libxkbcommon-devel
+sys:mesa-libGL-devel
+sys:alsa-lib-devel
+sys:pulseaudio-libs-devel
+sys:pipewire-devel
+sys:libdrm-devel
+sys:mesa-libgbm-devel
+sys:systemd-devel
+sys:dbus-devel
+sys:libusb1-devel
+\
