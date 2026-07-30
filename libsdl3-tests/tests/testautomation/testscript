@@ -4,4 +4,4 @@
 env --timeout 120 --timeout-success \
     SDL_VIDEODRIVER=dummy \
     SDL_AUDIODRIVER=dummy \
-    -- $* 2>|
+    -- $* 2>! == 0
