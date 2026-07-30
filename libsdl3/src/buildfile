@@ -135,9 +135,11 @@ lib{sdl3}: \
   camera/v4l2/{h c}{*} \
   camera/pipewire/{h c}{*} \
   sensor/dummy/{h c}{*} \
-  hidapi/linux/{h c}{*} \
   io/io_uring/{h c}{*}: include = $linux
 
+# Note: hidapi/<platform>/hid.c is #included from SDL_hidapi_*.h (not a
+# separate TU). Do not add hidapi/linux or hidapi/windows to compile lists.
+#
 # --- platform backends (Windows) ---
 #
 windows = ($c.target.class == 'windows')
@@ -154,7 +156,6 @@ lib{sdl3}: \
   misc/windows/{h c}{*} \
   power/windows/{h c}{*} \
   thread/windows/{h c}{*} \
-  thread/generic/{h c}{*} \
   time/windows/{h c}{*} \
   timer/windows/{h c}{*} \
   loadso/windows/{h c}{*} \
@@ -169,17 +170,25 @@ lib{sdl3}: \
   render/direct3d12/{h c}{*} \
   gpu/d3d11/{h c}{*} \
   gpu/d3d12/{h c}{*} \
-  hidapi/windows/{h c}{*} \
   io/windows/{h c}{*}: include = $windows
+
+# Windows also uses selected thread/generic sources (not the full tree:
+# SDL_syssem.c is windows/SDL_syssem.c, and generic/SDL_syssem.c is only
+# #included from the pthread backend).
+#
+lib{sdl3}: \
+  thread/generic/{h c}{SDL_syscond SDL_sysrwlock}: include = $windows
 
 lib{sdl3}: $impl_libs $intf_libs
 
-# Private headers and #include'd sources. Must be in the dependency graph so
-# `b dist` packages them (in-repo symlinks otherwise hide the gap).
+# Private headers and #include'd sources. Must be prerequisites so build2
+# tracks them (and so `b dist` packs them through in-repo symlinks).
 #
 lib{sdl3}: h{**}: include = adhoc
 
-# .c files that are #include'd rather than compiled as separate TUs.
+# .c files that are #include'd into other TUs (not compiled on their own).
+# c{} + include=adhoc is the correct form: declared as C sources for
+# dependency tracking, not linked as separate translation units.
 #
 lib{sdl3}: \
   hidapi/mac/c{hid} \
