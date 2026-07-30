@@ -1,0 +1,6 @@
+$out_root/
+{
+  include sdl3-test/
+}
+
+export $out_root/sdl3-test/$import.target

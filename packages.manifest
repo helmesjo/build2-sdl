@@ -1,2 +1,5 @@
 : 1
 location: libsdl3/
+
+:
+location: libsdl3-tests/

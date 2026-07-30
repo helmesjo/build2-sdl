@@ -1,0 +1,41 @@
+intf_libs = # Interface dependencies.
+impl_libs = # Implementation dependencies.
+#import xxxx_libs += libhello%lib{hello}
+
+lib{sdl3-tests}: {h c}{**} $impl_libs $intf_libs
+
+# Build options.
+#
+c.poptions =+ "-I$out_root" "-I$src_root"
+
+#obja{*}: c.poptions += -DSDL3_TEST_STATIC_BUILD
+#objs{*}: c.poptions += -DSDL3_TEST_SHARED_BUILD
+
+# Export options.
+#
+lib{sdl3-tests}:
+{
+  c.export.poptions = "-I$out_root" "-I$src_root"
+  c.export.libs = $intf_libs
+}
+
+#liba{sdl3-tests}: c.export.poptions += -DSDL3_TEST_STATIC
+#libs{sdl3-tests}: c.export.poptions += -DSDL3_TEST_SHARED
+
+# For pre-releases use the complete version to make sure they cannot
+# be used in place of another pre-release or the final version. See
+# the version module for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{sdl3-tests}: bin.lib.version = "-$version.project_id"
+else
+  lib{sdl3-tests}: bin.lib.version = "-$version.major.$version.minor"
+
+# Install into the sdl3-test/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+h{*}:
+{
+  install         = include/sdl3-test/
+  install.subdirs = true
+}

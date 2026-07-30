@@ -1,0 +1,3 @@
+import libs = libsdl3-tests%lib{sdl3-tests}
+
+exe{driver}: {h c}{**} $libs testscript{**}
