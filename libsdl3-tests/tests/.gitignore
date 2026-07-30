@@ -6,3 +6,7 @@ driver
 #
 test
 test-*
+
+# Test executables.
+#
+testautomation/testautomation
