@@ -1,0 +1,36 @@
+# Directory symlinks into upstream/ (Windows requires explicit type).
+# See build2.org/article/symlinks.xhtml and git symlink=dir.
+#
+include/SDL3 symlink=dir
+include/build_config symlink=dir
+src/atomic symlink=dir
+src/audio symlink=dir
+src/camera symlink=dir
+src/core symlink=dir
+src/cpuinfo symlink=dir
+src/dialog symlink=dir
+src/dynapi symlink=dir
+src/events symlink=dir
+src/filesystem symlink=dir
+src/gpu symlink=dir
+src/haptic symlink=dir
+src/hidapi symlink=dir
+src/io symlink=dir
+src/joystick symlink=dir
+src/libm symlink=dir
+src/loadso symlink=dir
+src/locale symlink=dir
+src/main symlink=dir
+src/misc symlink=dir
+src/power symlink=dir
+src/process symlink=dir
+src/render symlink=dir
+src/sensor symlink=dir
+src/stdlib symlink=dir
+src/storage symlink=dir
+src/test symlink=dir
+src/thread symlink=dir
+src/time symlink=dir
+src/timer symlink=dir
+src/tray symlink=dir
+src/video symlink=dir
