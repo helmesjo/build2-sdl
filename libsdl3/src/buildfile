@@ -58,13 +58,11 @@ lib{sdl3}: \
   timer/{h c}{*} \
   time/{h c}{*} \
   filesystem/{h c}{*} \
-  filesystem/posix/{h c}{*} \
   loadso/{h c}{*} \
   locale/{h c}{*} \
   misc/{h c}{*} \
   power/{h c}{*} \
   process/{h c}{*} \
-  process/posix/{h c}{*} \
   storage/{h c}{*} \
   storage/generic/{h c}{*} \
   storage/steam/{h c}{*} \
@@ -104,9 +102,6 @@ lib{sdl3}: \
   sensor/dummy/{h c}{*} \
   core/unix/{h c}{*}: include = $macos
 
-# Note: hidapi/mac/hid.c is #included from hidapi/SDL_hidapi.c (not a separate
-# translation unit). Same pattern may apply on other platforms.
-#
 # --- platform backends (Linux) ---
 #
 linux = ($c.target.class == 'linux')
@@ -137,9 +132,14 @@ lib{sdl3}: \
   sensor/dummy/{h c}{*} \
   io/io_uring/{h c}{*}: include = $linux
 
-# Note: hidapi/<platform>/hid.c is #included from SDL_hidapi_*.h (not a
-# separate TU). Do not add hidapi/linux or hidapi/windows to compile lists.
+# POSIX filesystem/process helpers (not used on Windows; matches CMake).
 #
+posix = ($c.target.class != 'windows')
+
+lib{sdl3}: \
+  filesystem/posix/{h c}{*} \
+  process/posix/{h c}{*}: include = $posix
+
 # --- platform backends (Windows) ---
 #
 windows = ($c.target.class == 'windows')
@@ -181,14 +181,16 @@ lib{sdl3}: \
 
 lib{sdl3}: $impl_libs $intf_libs
 
-# Private headers and #include'd sources. Must be prerequisites so build2
-# tracks them (and so `b dist` packs them through in-repo symlinks).
+# Private headers as ordinary library prerequisites (not adhoc). Same as the
+# packaging guide {h c}{**} pattern: headers are not compiled, but must be
+# prereqs for rebuilds and for dist through the upstream directory symlinks.
+# Recursive so platform-subdir headers (e.g. hidapi/windows/*.h) are included
+# even when those dirs are not on the compile list.
 #
-lib{sdl3}: h{**}: include = adhoc
+lib{sdl3}: h{**}
 
-# .c files that are #include'd into other TUs (not compiled on their own).
-# c{} + include=adhoc is the correct form: declared as C sources for
-# dependency tracking, not linked as separate translation units.
+# .c files that are only #include'd into other TUs (never their own object).
+# adhoc is required here so they are not treated as linkable translation units.
 #
 lib{sdl3}: \
   hidapi/mac/c{hid} \
