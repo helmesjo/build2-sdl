@@ -1,0 +1,17 @@
+import libs = libsdl3%lib{sdl3}
+import test_libs = libsdl3-tests%lib{sdl3-test}
+
+# Upstream noninteractive automation suite (CMake: NONINTERACTIVE_TIMEOUT 120).
+#
+exe{testautomation}: c{testautomation* testutils} $libs $test_libs testscript
+
+# Make the executable part of the default directory target so `b test` finds it.
+#
+./: exe{testautomation}
+
+# Private headers and resource files for dist and SDL_GetBasePath lookups.
+#
+./: file{*.png *.wav *.csv *.hex *.dat utf8.txt} h{*}
+
+exe{testautomation}: file{*.png *.wav *.csv *.hex *.dat utf8.txt} h{*}: \
+  include = adhoc

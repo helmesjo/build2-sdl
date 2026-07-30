@@ -1,0 +1,1 @@
+../../../upstream/test/testautomation_sdltest.c

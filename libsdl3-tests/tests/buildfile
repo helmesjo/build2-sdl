@@ -1,1 +1,3 @@
-./: {*/ -build/}
+# Test programs for libsdl3-tests.
+#
+./: testautomation/

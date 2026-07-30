@@ -1,0 +1,7 @@
+# Headless-friendly run. Upstream marks this suite NONINTERACTIVE (120s).
+# Logging goes to stderr (including Apple unified logging wrappers).
+#
+env --timeout 120 --timeout-success \
+    SDL_VIDEODRIVER=dummy \
+    SDL_AUDIODRIVER=dummy \
+    -- $* 2>|
