@@ -50,7 +50,9 @@ windows-msvc-build-include: windows*-msvc**
 windows-msvc-build-exclude: **
 
 # Debian/Ubuntu: install multimedia -dev packages so header probes succeed.
-# Package names are distro names (see bpkg system package manager).
+# Use bpkg library names (lib*). CI passes --sys-no-stub, which maps
+# libfoo -> libfoo-dev. Do not write distro -dev suffixes here (that would
+# look for libfoo-dev-dev).
 #
 debian-builds: sys
 debian-builds: -static
@@ -60,27 +62,26 @@ debian-build-include: linux_ubuntu*-**
 debian-build-exclude: **
 debian-build-config:
 \
-sys:libx11-dev
-sys:libxext-dev
-sys:libxcursor-dev
-sys:libxi-dev
-sys:libxfixes-dev
-sys:libxrandr-dev
-sys:libxss-dev
-sys:libxtst-dev
-sys:libxkbcommon-dev
-sys:libgl-dev
-sys:libasound2-dev
-sys:libpulse-dev
-sys:libpipewire-0.3-dev
-sys:libdrm-dev
-sys:libgbm-dev
-sys:libudev-dev
-sys:libdbus-1-dev
-sys:libusb-1.0-0-dev
+sys:libx11
+sys:libxext
+sys:libxcursor
+sys:libxi
+sys:libxfixes
+sys:libxrandr
+sys:libxss
+sys:libxtst
+sys:libxkbcommon
+sys:libgl
+sys:libasound2
+sys:libpulse
+sys:libpipewire-0.3
+sys:libdrm
+sys:libgbm
+sys:libudev
+sys:libdbus-1
 \
 
-# Fedora/RHEL-alike: same intent with Fedora package names.
+# Fedora/RHEL-alike: same intent. libfoo -> libfoo-devel (note X11 capital X).
 #
 fedora-builds: sys
 fedora-builds: -static
@@ -89,22 +90,15 @@ fedora-build-include: linux_fedora*-**
 fedora-build-exclude: **
 fedora-build-config:
 \
-sys:libX11-devel
-sys:libXext-devel
-sys:libXcursor-devel
-sys:libXi-devel
-sys:libXfixes-devel
-sys:libXrandr-devel
-sys:libXScrnSaver-devel
-sys:libXtst-devel
-sys:libxkbcommon-devel
-sys:mesa-libGL-devel
-sys:alsa-lib-devel
-sys:pulseaudio-libs-devel
-sys:pipewire-devel
-sys:libdrm-devel
-sys:mesa-libgbm-devel
-sys:systemd-devel
-sys:dbus-devel
-sys:libusb1-devel
+sys:libX11
+sys:libXext
+sys:libXcursor
+sys:libXi
+sys:libXfixes
+sys:libXrandr
+sys:libXScrnSaver
+sys:libXtst
+sys:libxkbcommon
+sys:libdrm
+sys:libusb1
 \
