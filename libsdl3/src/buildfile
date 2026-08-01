@@ -1,6 +1,8 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
 
+./: lib{sdl3}
+
 # Public headers.
 #
 pub = [dir_path] ../include/
@@ -174,10 +176,12 @@ lib{sdl3}: \
 
 # Windows also uses selected thread/generic sources (not the full tree:
 # SDL_syssem.c is windows/SDL_syssem.c, and generic/SDL_syssem.c is only
-# #included from the pthread backend).
+# #included from the pthread backend). Headers use the upstream "_c" suffix
+# (SDL_syscond_c.h, SDL_sysrwlock_c.h), unlike their .c counterparts.
 #
 lib{sdl3}: \
-  thread/generic/{h c}{SDL_syscond SDL_sysrwlock}: include = $windows
+  thread/generic/h{SDL_syscond_c SDL_sysrwlock_c} \
+  thread/generic/c{SDL_syscond SDL_sysrwlock SDL_systls}: include = $windows
 
 lib{sdl3}: $impl_libs $intf_libs
 
@@ -189,17 +193,23 @@ lib{sdl3}: $impl_libs $intf_libs
 #
 lib{sdl3}: h{**}
 
-# .c files that are only #include'd into other TUs (never their own object).
-# adhoc is required here so they are not treated as linkable translation units.
+# Vendored hidapi backend sources: SDL_hidapi.c #includes exactly one of
+# these per platform (via SDL_hidapi_<platform>.h), so each participates
+# (adhoc: tracked, never its own compiled TU) only on its matching platform.
+# Declared unconditionally (not gated by if/else) so `dist` still packages
+# every backend regardless of which platform built it -- see
+# HOWTO/config-independent-build-graph.md.
 #
-lib{sdl3}: \
-  hidapi/mac/c{hid} \
-  hidapi/linux/c{hid} \
-  hidapi/windows/c{hid} \
-  hidapi/windows/c{hidapi_descriptor_reconstruct} \
-  hidapi/libusb/c{hid} \
-  hidapi/netbsd/c{hid} \
-  thread/generic/c{SDL_syssem}: include = adhoc
+lib{sdl3}: hidapi/mac/c{hid}: include = ($macos ? adhoc : false)
+lib{sdl3}: hidapi/linux/c{hid}: include = ($linux ? adhoc : false)
+lib{sdl3}: hidapi/windows/c{hid hidapi_descriptor_reconstruct}: include = ($windows ? adhoc : false)
+lib{sdl3}: hidapi/libusb/c{hid}: include = ($linux ? adhoc : false)
+lib{sdl3}: hidapi/netbsd/c{hid}: include = ($c.target.class == 'bsd' ? adhoc : false)
+
+# #include'd only from thread/pthread/SDL_syssem.c (the pthread backend,
+# used on macOS and Linux).
+#
+lib{sdl3}: thread/generic/c{SDL_syssem}: include = ($posix ? adhoc : false)
 
 # --- private generated SDL_build_config.h (libbuild2-autoconf) ---
 #
