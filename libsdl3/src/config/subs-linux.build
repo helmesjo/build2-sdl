@@ -206,6 +206,7 @@ config_subs = \
   SDL_VIDEO_DRIVER_WINDOWS@false \
   SDL_VIDEO_METAL@false \
   SDL_VIDEO_OPENGL@true \
+  SDL_VIDEO_OPENGL_CGL@false \
   SDL_VIDEO_OPENGL_EGL@true \
   SDL_VIDEO_OPENGL_ES@false \
   SDL_VIDEO_OPENGL_ES2@true \
