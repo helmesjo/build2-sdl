@@ -15,3 +15,18 @@ exe{testautomation}: c{testautomation* testutils} $libs $test_libs testscript
 
 exe{testautomation}: file{*.png *.wav *.csv *.hex *.dat utf8.txt} h{*}: \
   include = adhoc
+
+# testautomation_joystick.c does #include "../src/joystick/usb_ids.h" as in
+# upstream (test/ next to src/). That header is private to libsdl3 and is not
+# exported or installed, so import of lib{sdl3} does not expose it.
+#
+# Provide the same geometry under this tests subproject:
+#   tests/src/joystick/usb_ids.h -> libsdl3/src/joystick/usb_ids.h
+# and put the test source directory on the include path so "../src/..."
+# resolves there. The header is a normal prerequisite so dist materializes
+# a real file inside the package (required for bpkg / CI test-installed).
+#
+c.poptions =+ "-I$src_base"
+
+exe{testautomation}: ../src/joystick/h{usb_ids}
+./: ../src/joystick/h{usb_ids}
