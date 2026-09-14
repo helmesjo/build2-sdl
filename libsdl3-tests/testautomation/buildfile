@@ -1,6 +1,50 @@
-libs =
-#import libs += libhello%lib{hello}
+import libs  = libsdl3%lib{sdl3}
+import tlibs = libsdl3-tests%lib{sdl3-test}
 
-exe{testautomation}: {h c}{**} $libs testscript
+# sdltests_utils lives in the sibling utils/ subdirectory of this same
+# package -- reached with a plain include, not the %-qualified import used
+# above for libsdl3 and lib{sdl3-test} (those cross a real project boundary;
+# utils/ does not, it's an ordinary sibling directory). The trailing slash
+# is required: `include ../utils` (bare directory, no slash) fails with
+# "unable to read buildfile utils: is a directory".
+#
+include ../utils/
 
-c.poptions =+ "-I$out_root" "-I$src_root"
+exe{testautomation}: c{testautomation*} $libs $tlibs ../utils/libue{sdltests_utils} testscript
+
+# This is the package's actual test: not inside a bdep-new tests/
+# subproject (there isn't one -- no-tests at scaffold time), so mark it
+# explicitly.
+#
+exe{testautomation}: test = true
+
+# Not part of the installed surface: this is upstream's own test runner,
+# not something a consumer installing libsdl3-tests wants in their bin/.
+#
+exe{testautomation}: install = false
+
+./: exe{testautomation}
+
+# Runtime resource files upstream's own build copies next to the executable
+# (upstream/test/CMakeLists.txt: file(GLOB RESOURCE_FILES *.png *.wav *.csv
+# moose.dat utf8.txt), which testautomation requests via NEEDS_RESOURCES).
+# unifont-15.1.05.hex/-license.txt are excluded: only testime.c (a
+# different, unpackaged test program) references them, not testautomation.
+#
+exe{testautomation}: file{*.png *.wav *.csv moose.dat utf8.txt} h{*}: include = adhoc
+
+# testautomation_joystick.c does #include "../src/joystick/usb_ids.h" as in
+# upstream (test/ next to src/). That header is private to libsdl3 and not
+# exported or installed, so importing lib{sdl3} does not expose it. List it
+# as a normal prerequisite (not adhoc) so dist materializes it as a real
+# file; it does not collide with lib{sdl3-test}'s own wildcard in src/ (that
+# wildcard is single-level and does not reach into src/joystick/).
+#
+c.poptions =+ "-I$src_base"
+exe{testautomation}: ../src/joystick/h{usb_ids}
+./: ../src/joystick/h{usb_ids}
+
+# The permissive license covering testautomation*.* specifically (upstream/
+# test/LICENSE.txt). Not part of the installed surface, so install = false.
+#
+./: legal{LICENSE.txt}: install = false
