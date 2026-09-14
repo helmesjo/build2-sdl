@@ -1,0 +1,1 @@
+../../../upstream/examples/asyncio/01-load-bitmaps/load-bitmaps.c
