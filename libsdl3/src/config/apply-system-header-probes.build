@@ -1,0 +1,29 @@
+# Optional third-party / package header probes via $c.find_system_header().
+# Applied as target-specific variables on h{build_config/SDL_build_config}.
+#
+# Standard C library headers and functions are handled by libbuild2-autoconf
+# builtin checks or project checks in build/autoconf/checks/. Do not put those
+# here. Only headers whose presence depends on optional installed packages
+# (or optional OS component SDKs not implied by the target triple) belong here.
+#
+# Lookup: ($c.find_system_header("path") != [null])
+
+h{build_config/SDL_build_config}:
+{
+  HAVE_DBUS_DBUS_H = ($c.find_system_header("dbus/dbus.h") != [null])
+  HAVE_FRIBIDI_H = ($c.find_system_header("fribidi.h") != [null])
+  HAVE_IBUS_IBUS_H = \
+    ($c.find_system_header("ibus-1.0/ibus.h") != [null] || \
+     $c.find_system_header("ibus.h") != [null])
+  HAVE_ICONV_H = ($c.find_system_header("iconv.h") != [null])
+  HAVE_LIBDECOR_H = \
+    ($c.find_system_header("libdecor-0/libdecor.h") != [null] || \
+     $c.find_system_header("libdecor.h") != [null])
+  HAVE_LIBTHAI_H = ($c.find_system_header("thai/thwchar.h") != [null])
+  HAVE_LIBUDEV_H = ($c.find_system_header("libudev.h") != [null])
+  HAVE_LIBURING_H = ($c.find_system_header("liburing.h") != [null])
+  HAVE_LIBUSB = \
+    ($c.find_system_header("libusb-1.0/libusb.h") != [null] || \
+     $c.find_system_header("libusb.h") != [null])
+  HAVE_LINUX_INPUT_H = ($c.find_system_header("linux/input.h") != [null])
+}
