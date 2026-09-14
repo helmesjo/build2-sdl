@@ -1,0 +1,1 @@
+../../../upstream/src/video/SDL_stb_c.h

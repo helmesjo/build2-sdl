@@ -1,0 +1,1 @@
+../../../../upstream/src/video/directx/gen_xbox_cmacros.cs
