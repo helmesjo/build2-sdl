@@ -1,0 +1,1 @@
+../../../upstream/examples/camera/01-read-and-draw/read-and-draw.c

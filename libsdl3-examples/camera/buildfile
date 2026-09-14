@@ -1,6 +1,5 @@
-libs =
-#import libs += libhello%lib{hello}
+import libs = libsdl3%lib{sdl3}
 
-exe{camera}: {h c}{**} $libs
+./: exe{camera-read-and-draw}: c{01-read-and-draw/read-and-draw} $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
