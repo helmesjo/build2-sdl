@@ -1,15 +1,86 @@
 : 1
 name: libsdl3-tests
-version: 0.1.0-a.0.z
+version: 3.4.12-a.0.z
 language: c
 project: sdl
-summary: sdl3-tests C library
-license: other: proprietary ; Not free/open source.
+summary: cross-platform multimedia C library (tests)
+license: Zlib
 description-file: README.md
 package-description-file: PACKAGE-README.md
-url: https://example.org/upstream
-email: upstream@example.org
-package-url: https://github.com/build2-packaging/sdl
+changes-file: WhatsNew.txt
+url: https://www.libsdl.org/
+doc-url: https://wiki.libsdl.org/
+src-url: https://github.com/libsdl-org/SDL
+email: slouken@libsdl.org
+package-url: https://github.com/build2-packaging/SDL
 package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
+
+# CI configuration (keep aligned with libsdl3).
+#
+# Tests use SDL_VIDEODRIVER=dummy and SDL_AUDIODRIVER=dummy (no GPU/display).
+# Same build matrix as the primary package so bots that build libsdl3 also run
+# testautomation.
+#
+
+builds: -freebsd
+builds: -linux
+builds: -macos
+builds: -windows
+builds: -bindist
+
+macos-clang-builds: macos
+macos-clang-build-include: macos_*-clang
+macos-clang-build-exclude: **
+
+windows-msvc-builds: windows
+windows-msvc-build-include: windows*-msvc**
+windows-msvc-build-exclude: **
+
+debian-builds: sys
+debian-builds: -static
+debian-builds: -bindist
+debian-build-include: linux_debian*-**
+debian-build-include: linux_ubuntu*-**
+debian-build-exclude: **
+debian-build-config:
+\
+sys:libx11
+sys:libxext
+sys:libxcursor
+sys:libxi
+sys:libxfixes
+sys:libxrandr
+sys:libxss
+sys:libxtst
+sys:libxkbcommon
+sys:libgl
+sys:libasound2
+sys:libpulse
+sys:libpipewire-0.3
+sys:libdrm
+sys:libgbm
+sys:libudev
+sys:libdbus-1
+\
+
+fedora-builds: sys
+fedora-builds: -static
+fedora-builds: -bindist
+fedora-build-include: linux_fedora*-**
+fedora-build-exclude: **
+fedora-build-config:
+\
+sys:libX11
+sys:libXext
+sys:libXcursor
+sys:libXi
+sys:libXfixes
+sys:libXrandr
+sys:libXScrnSaver
+sys:libXtst
+sys:libxkbcommon
+sys:libdrm
+sys:libusb1
+\
