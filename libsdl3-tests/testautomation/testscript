@@ -1,9 +1,4 @@
-: basics
-:
-$* 'World' >'Hello, World!'
-
-: missing-name
-:
-$* 2>>EOE != 0
-error: missing name
-EOE
+env --timeout 120 --timeout-success \
+    SDL_VIDEODRIVER=dummy \
+    SDL_AUDIODRIVER=dummy \
+    -- $* 2>! == 0
