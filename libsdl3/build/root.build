@@ -5,6 +5,15 @@
 using c
 using c.objc
 
+# Objective-C ARC and the Cocoa backend's use of the modern Apple SDK
+# headers are Clang-only. Fail early with a clear diagnostic instead of
+# letting an unsupported compiler hit a raw driver error deep in a
+# compile invocation (matches upstream's own check_c_compiler_flag +
+# FATAL_ERROR guard in CMakeLists.txt).
+#
+if ($c.target.class == 'macos' && $c.id != 'clang' && $c.id != 'clang-apple')
+  fail 'libsdl3 requires Clang on macOS (Objective-C ARC)'
+
 h{*}: extension = h
 c{*}: extension = c
 m{*}: extension = m
