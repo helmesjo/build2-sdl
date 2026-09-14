@@ -11,6 +11,9 @@ import impl_libs = \
   libegl-registry%lib{egl-registry} \
   libopengl-registry%lib{opengl-registry}
 
+if ($c.target.class == 'windows')
+  import impl_libs += libdirectx-headers%lib{directx-headers}
+
 ./: lib{sdl3}
 
 # Public headers.
