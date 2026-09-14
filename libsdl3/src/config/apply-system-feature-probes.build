@@ -1,0 +1,146 @@
+# Optional system-library SDL_* drivers: default from toolchain probes.
+#
+# These names are intentionally absent from config/subs-*.build so they are not
+# forced via autoconf.substitutions. Values are target-specific variables on
+# h{build_config/SDL_build_config} (lookup priority 2).
+#
+# Policy:
+# - Enable a driver when its primary system header is present.
+# - Prefer DYNAMIC (dlopen) form with a conventional SONAME so link does not
+#   require -l for that dependency (matches typical upstream CMake defaults).
+# - Wayland stays off until this package runs wayland-scanner and generates
+#   protocol headers (upstream does that at CMake time).
+#
+# CI installs the corresponding -dev packages via manifest *-build-config sys:
+# entries so these probes light up on automated builds.
+
+h{build_config/SDL_build_config}:
+{
+  # --- X11 ---
+  #
+  SDL_VIDEO_DRIVER_X11 = \
+    ($c.find_system_header("X11/Xlib.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC = \
+    ($c.find_system_header("X11/Xlib.h") != [null] ? '"libX11.so.6"' : false)
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT = \
+    ($c.find_system_header("X11/extensions/Xext.h") != [null] \
+       ? '"libXext.so.6"' : false)
+  SDL_VIDEO_DRIVER_X11_XCURSOR = \
+    ($c.find_system_header("X11/Xcursor/Xcursor.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XCURSOR = \
+    ($c.find_system_header("X11/Xcursor/Xcursor.h") != [null] \
+       ? '"libXcursor.so.1"' : false)
+  SDL_VIDEO_DRIVER_X11_XFIXES = \
+    ($c.find_system_header("X11/extensions/Xfixes.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XFIXES = \
+    ($c.find_system_header("X11/extensions/Xfixes.h") != [null] \
+       ? '"libXfixes.so.3"' : false)
+  SDL_VIDEO_DRIVER_X11_XINPUT2 = \
+    ($c.find_system_header("X11/extensions/XInput2.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XINPUT2 = \
+    ($c.find_system_header("X11/extensions/XInput2.h") != [null] \
+       ? '"libXi.so.6"' : false)
+  SDL_VIDEO_DRIVER_X11_XINPUT2_SUPPORTS_GESTURE = \
+    ($c.find_system_header("X11/extensions/XInput2.h") != [null])
+  SDL_VIDEO_DRIVER_X11_XINPUT2_SUPPORTS_MULTITOUCH = \
+    ($c.find_system_header("X11/extensions/XInput2.h") != [null])
+  SDL_VIDEO_DRIVER_X11_XINPUT2_SUPPORTS_SCROLLINFO = \
+    ($c.find_system_header("X11/extensions/XInput2.h") != [null])
+  SDL_VIDEO_DRIVER_X11_XRANDR = \
+    ($c.find_system_header("X11/extensions/Xrandr.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XRANDR = \
+    ($c.find_system_header("X11/extensions/Xrandr.h") != [null] \
+       ? '"libXrandr.so.2"' : false)
+  SDL_VIDEO_DRIVER_X11_XSCRNSAVER = \
+    ($c.find_system_header("X11/extensions/scrnsaver.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XSS = \
+    ($c.find_system_header("X11/extensions/scrnsaver.h") != [null] \
+       ? '"libXss.so.1"' : false)
+  SDL_VIDEO_DRIVER_X11_XTEST = \
+    ($c.find_system_header("X11/extensions/XTest.h") != [null])
+  SDL_VIDEO_DRIVER_X11_DYNAMIC_XTEST = \
+    ($c.find_system_header("X11/extensions/XTest.h") != [null] \
+       ? '"libXtst.so.6"' : false)
+  SDL_VIDEO_DRIVER_X11_XDBE = \
+    ($c.find_system_header("X11/extensions/Xdbe.h") != [null])
+  SDL_VIDEO_DRIVER_X11_XSHAPE = \
+    ($c.find_system_header("X11/extensions/shape.h") != [null])
+  SDL_VIDEO_DRIVER_X11_XSYNC = \
+    ($c.find_system_header("X11/extensions/sync.h") != [null])
+  SDL_VIDEO_DRIVER_X11_HAS_XKBLIB = \
+    ($c.find_system_header("X11/XKBlib.h") != [null])
+  SDL_VIDEO_DRIVER_X11_SUPPORTS_GENERIC_EVENTS = \
+    ($c.find_system_header("X11/Xlib.h") != [null])
+  SDL_VIDEO_OPENGL_GLX = \
+    ($c.find_system_header("GL/glx.h") != [null])
+
+  # --- KMS/DRM ---
+  #
+  SDL_VIDEO_DRIVER_KMSDRM = \
+    ($c.find_system_header("xf86drm.h") != [null] && \
+     $c.find_system_header("xf86drmMode.h") != [null])
+  SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC = \
+    ($c.find_system_header("xf86drm.h") != [null] && \
+     $c.find_system_header("xf86drmMode.h") != [null] \
+       ? '"libdrm.so.2"' : false)
+  SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM = \
+    ($c.find_system_header("gbm.h") != [null] ? '"libgbm.so.1"' : false)
+
+  # --- Wayland (disabled until protocol generation is packaged) ---
+  #
+  SDL_VIDEO_DRIVER_WAYLAND = false
+  SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC = false
+  SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_CURSOR = false
+  SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_EGL = false
+  SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_LIBDECOR = false
+  SDL_VIDEO_DRIVER_WAYLAND_DYNAMIC_XKBCOMMON = false
+
+  # --- Audio ---
+  #
+  SDL_AUDIO_DRIVER_ALSA = \
+    ($c.find_system_header("alsa/asoundlib.h") != [null])
+  SDL_AUDIO_DRIVER_ALSA_DYNAMIC = \
+    ($c.find_system_header("alsa/asoundlib.h") != [null] \
+       ? '"libasound.so.2"' : false)
+  SDL_AUDIO_DRIVER_PULSEAUDIO = \
+    ($c.find_system_header("pulse/pulseaudio.h") != [null])
+  SDL_AUDIO_DRIVER_PULSEAUDIO_DYNAMIC = \
+    ($c.find_system_header("pulse/pulseaudio.h") != [null] \
+       ? '"libpulse.so.0"' : false)
+  SDL_AUDIO_DRIVER_PIPEWIRE = \
+    ($c.find_system_header("pipewire/pipewire.h") != [null])
+  SDL_AUDIO_DRIVER_PIPEWIRE_DYNAMIC = \
+    ($c.find_system_header("pipewire/pipewire.h") != [null] \
+       ? '"libpipewire-0.3.so.0"' : false)
+  SDL_AUDIO_DRIVER_JACK = \
+    ($c.find_system_header("jack/jack.h") != [null])
+  SDL_AUDIO_DRIVER_JACK_DYNAMIC = \
+    ($c.find_system_header("jack/jack.h") != [null] ? '"libjack.so.0"' : false)
+  SDL_AUDIO_DRIVER_SNDIO = \
+    ($c.find_system_header("sndio.h") != [null])
+  SDL_AUDIO_DRIVER_SNDIO_DYNAMIC = \
+    ($c.find_system_header("sndio.h") != [null] ? '"libsndio.so.7"' : false)
+
+  # --- Camera / input ---
+  #
+  SDL_CAMERA_DRIVER_V4L2 = \
+    ($c.find_system_header("linux/videodev2.h") != [null])
+  SDL_CAMERA_DRIVER_PIPEWIRE = \
+    ($c.find_system_header("pipewire/pipewire.h") != [null])
+  SDL_CAMERA_DRIVER_PIPEWIRE_DYNAMIC = \
+    ($c.find_system_header("pipewire/pipewire.h") != [null] \
+       ? '"libpipewire-0.3.so.0"' : false)
+  SDL_INPUT_LINUXEV = \
+    ($c.find_system_header("linux/input.h") != [null])
+  SDL_INPUT_LINUXKD = \
+    ($c.find_system_header("linux/kd.h") != [null])
+
+  # --- Misc optional SONAMEs (HAVE_* already probed separately) ---
+  #
+  SDL_UDEV_DYNAMIC = \
+    ($c.find_system_header("libudev.h") != [null] ? '"libudev.so.1"' : false)
+  SDL_LIBUSB_DYNAMIC = \
+    (($c.find_system_header("libusb-1.0/libusb.h") != [null] || \
+      $c.find_system_header("libusb.h") != [null]) \
+       ? '"libusb-1.0.so.0"' : false)
+}

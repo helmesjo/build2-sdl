@@ -1,0 +1,1 @@
+../../../upstream/include/build_config/SDL_build_config.h.cmake
