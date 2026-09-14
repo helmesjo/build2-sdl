@@ -1,0 +1,20 @@
+// HAVE_O_CLOEXEC : BUILD2_AUTOCONF_LIBC_VERSION
+
+#ifndef BUILD2_AUTOCONF_LIBC_VERSION
+#  error BUILD2_AUTOCONF_LIBC_VERSION appears to be conditionally included
+#endif
+
+#undef HAVE_O_CLOEXEC
+
+/* Check for the O_CLOEXEC open() flag.
+ *
+ * Available on Linux/glibc 2.7+, modern BSD, and Mac OS 10.7+. Not
+ * available on Windows including MinGW.
+ */
+#if BUILD2_AUTOCONF_GLIBC_PREREQ(2, 7)     || \
+    BUILD2_AUTOCONF_FREEBSD_PREREQ(10, 0)  || \
+    BUILD2_AUTOCONF_OPENBSD_PREREQ(201405) || \
+    BUILD2_AUTOCONF_NETBSD_PREREQ(6, 0)    || \
+    BUILD2_AUTOCONF_MACOS_PREREQ(10, 7)
+#  define HAVE_O_CLOEXEC 1
+#endif
