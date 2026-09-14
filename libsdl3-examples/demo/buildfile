@@ -1,6 +1,8 @@
-libs =
-#import libs += libhello%lib{hello}
+import libs = libsdl3%lib{sdl3}
 
-exe{demo}: {h c}{**} $libs
+./: exe{demo-snake}:             c{01-snake/snake}                         $libs
+./: exe{demo-woodeneye-008}:     c{02-woodeneye-008/woodeneye-008}         $libs
+./: exe{demo-infinite-monkeys}: c{03-infinite-monkeys/infinite-monkeys}   $libs
+./: exe{demo-bytepusher}:        c{04-bytepusher/bytepusher}               $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
