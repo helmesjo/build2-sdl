@@ -1,1 +1,4 @@
-input
+input-joystick-polling
+input-joystick-events
+input-gamepad-polling
+input-gamepad-events
