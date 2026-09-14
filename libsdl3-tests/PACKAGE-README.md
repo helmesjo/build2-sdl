@@ -1,23 +1,10 @@
-# libsdl3-tests - A C library
+# libsdl3-tests - Cross-platform multimedia C library (tests)
 
-This is a `build2` package for the [`<UPSTREAM-NAME>`](https://<UPSTREAM-URL>)
-C library. It provides <SUMMARY-OF-FUNCTIONALITY>.
-
-
-## Usage
-
-To start using `libsdl3-tests` in your project, add the following `depends`
-value to your `manifest`, adjusting the version constraint as appropriate:
-
-```
-depends: libsdl3-tests ^<VERSION>
-```
-
-Then import the library in your `buildfile`:
-
-```
-import libs = libsdl3-tests%lib{<TARGET>}
-```
+This is a `build2` package containing the test suite for the
+[`SDL`](https://github.com/libsdl-org/SDL) library. It provides
+`lib{sdl3-test}`, upstream's `SDL3_test` helper library, and links
+upstream's own `testautomation` noninteractive test suite as this
+package's test.
 
 
 ## Importable targets
@@ -25,18 +12,10 @@ import libs = libsdl3-tests%lib{<TARGET>}
 This package provides the following importable targets:
 
 ```
-lib{<TARGET>}
+lib{sdl3-test}
 ```
-
-<DESCRIPTION-OF-IMPORTABLE-TARGETS>
 
 
 ## Configuration variables
 
-This package provides the following configuration variables:
-
-```
-[bool] config.libsdl3_tests.<VARIABLE> ?= false
-```
-
-<DESCRIPTION-OF-CONFIG-VARIABLES>
+This package provides no configuration variables.
