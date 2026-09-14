@@ -7,3 +7,14 @@ import libs = libsdl3%lib{sdl3}
 ./: exe{audio-planar-data}:              c{05-planar-data/planar-data}                           $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
+
+# Runtime resources upstream's own build copies next to these executables
+# (upstream/examples/CMakeLists.txt DATAFILES).
+#
+exe{audio-load-wav}: file{sample.wav}: include = adhoc
+exe{audio-multiple-streams}: file{sample.wav sword.wav}: include = adhoc
+
+# Install next to the executables that use them.
+#
+file{sample.wav}@./: install = $install.bin
+file{sword.wav}@./: install = $install.bin

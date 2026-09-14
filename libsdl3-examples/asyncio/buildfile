@@ -3,3 +3,15 @@ import libs = libsdl3%lib{sdl3}
 ./: exe{asyncio-load-bitmaps}: c{01-load-bitmaps/load-bitmaps} $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
+
+# Runtime resources upstream's own build copies next to this executable
+# (upstream/examples/CMakeLists.txt DATAFILES).
+#
+exe{asyncio-load-bitmaps}: file{sample.png gamepad_front.png speaker.png icon2x.png}: include = adhoc
+
+# Install next to the executable that uses them.
+#
+file{sample.png}@./: install = $install.bin
+file{gamepad_front.png}@./: install = $install.bin
+file{speaker.png}@./: install = $install.bin
+file{icon2x.png}@./: install = $install.bin

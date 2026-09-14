@@ -18,3 +18,15 @@ import libs = libsdl3%lib{sdl3}
 ./: exe{renderer-affine-textures}:    c{19-affine-textures/affine-textures}        $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
+
+# Runtime resource upstream's own build copies next to each of these
+# executables (upstream/examples/CMakeLists.txt DATAFILES).
+#
+exe{renderer-textures renderer-rotating-textures renderer-scaling-textures \
+    renderer-geometry renderer-color-mods renderer-viewport \
+    renderer-cliprect renderer-read-pixels renderer-affine-textures}: \
+  file{sample.png}: include = adhoc
+
+# Install next to the executables that use it.
+#
+file{sample.png}@./: install = $install.bin
