@@ -1,1 +1,5 @@
-audio
+audio-simple-playback
+audio-simple-playback-callback
+audio-load-wav
+audio-multiple-streams
+audio-planar-data
