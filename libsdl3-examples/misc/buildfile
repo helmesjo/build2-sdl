@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative programs, not automated tests: building them is enough,
+# do not try to launch a windowed/clipboard program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{misc-power}:     c{01-power/power}         $libs
 ./: exe{misc-clipboard}: c{02-clipboard/clipboard}  $libs
 

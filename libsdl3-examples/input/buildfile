@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative programs, not automated tests: building them is enough,
+# do not try to launch a windowed/audio/input program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{input-joystick-polling}: c{01-joystick-polling/joystick-polling} $libs
 ./: exe{input-joystick-events}:  c{02-joystick-events/joystick-events}   $libs
 ./: exe{input-gamepad-polling}:  c{03-gamepad-polling/gamepad-polling}   $libs
