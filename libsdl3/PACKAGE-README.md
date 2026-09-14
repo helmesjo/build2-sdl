@@ -6,6 +6,15 @@ cross-platform access to audio, keyboard, mouse, joystick/gamepad, and
 graphics hardware, used by games, emulators, and other multimedia
 applications.
 
+`SDL` vendors a modified copy of `stb_image` (indexed-PNG palette loading via
+`stbi_load_from_callbacks_with_palette`, direct MJPG-to-NV12 JPEG decode)
+rather than depending on it. The palette-loading addition is based on
+[nothings/stb#788](https://github.com/nothings/stb/pull/788), which the
+`stb_image` maintainer declined to merge upstream. `SDL` periodically
+re-syncs the vendored copy against current `stb_image` and reapplies these
+changes on top, so this package keeps it bundled rather than unbundling it
+as a `depends`.
+
 
 ## Usage
 
