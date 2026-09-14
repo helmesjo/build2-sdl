@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative programs, not automated tests: building them is enough,
+# do not try to launch a windowed program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{demo-snake}:             c{01-snake/snake}                         $libs
 ./: exe{demo-woodeneye-008}:     c{02-woodeneye-008/woodeneye-008}         $libs
 ./: exe{demo-infinite-monkeys}: c{03-infinite-monkeys/infinite-monkeys}   $libs

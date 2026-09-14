@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative programs, not automated tests: building them is enough,
+# do not try to launch a windowed/audio/input program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{renderer-clear}:              c{01-clear/clear}                            $libs
 ./: exe{renderer-primitives}:         c{02-primitives/primitives}                  $libs
 ./: exe{renderer-lines}:              c{03-lines/lines}                            $libs

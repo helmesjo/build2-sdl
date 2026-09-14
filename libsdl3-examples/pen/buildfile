@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative program, not an automated test: building it is enough, do
+# not try to launch a windowed/input program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{pen-drawing-lines}: c{01-drawing-lines/drawing-lines} $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"

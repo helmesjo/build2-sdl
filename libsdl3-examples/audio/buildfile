@@ -1,5 +1,10 @@
 import libs = libsdl3%lib{sdl3}
 
+# Demonstrative programs, not automated tests: building them is enough,
+# do not try to launch a windowed/audio/input program headlessly.
+#
+exe{*}: test = false
+
 ./: exe{audio-simple-playback}:          c{01-simple-playback/simple-playback}                   $libs
 ./: exe{audio-simple-playback-callback}: c{02-simple-playback-callback/simple-playback-callback} $libs
 ./: exe{audio-load-wav}:                 c{03-load-wav/load-wav}                                 $libs
