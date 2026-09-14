@@ -9,7 +9,8 @@ impl_libs = # Implementation dependencies.
 import impl_libs = \
   libvulkan-headers%lib{vulkan-headers} \
   libegl-registry%lib{egl-registry} \
-  libopengl-registry%lib{opengl-registry}
+  libopengl-registry%lib{opengl-registry} \
+  libminiz%lib{miniz}
 
 if ($c.target.class == 'windows')
   import impl_libs += libdirectx-headers%lib{directx-headers}

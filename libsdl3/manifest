@@ -21,4 +21,5 @@ depends: libvulkan-headers ^1.4.359
 depends: libegl-registry ~2026.3.19-
 depends: libopengl-registry ~2026.8.3-
 depends: libdirectx-headers ^1.619.5 ? ($c.target.class == 'windows')
+depends: libminiz ^3.0.2
 tests: libsdl3-tests == $
