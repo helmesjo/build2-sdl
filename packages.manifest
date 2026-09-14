@@ -3,3 +3,6 @@ location: libsdl3/
 
 :
 location: libsdl3-tests/
+
+:
+location: libsdl3-examples/
