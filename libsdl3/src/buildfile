@@ -1,6 +1,16 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
 
+# None of these appear in libsdl3's own public headers (SDL3/SDL_vulkan.h,
+# SDL3/SDL_egl.h, and SDL3/SDL_opengles2*.h all deliberately define their
+# own minimal opaque types rather than requiring the real headers), so
+# every one is impl_libs, never intf_libs.
+#
+import impl_libs = \
+  libvulkan-headers%lib{vulkan-headers} \
+  libegl-registry%lib{egl-registry} \
+  libopengl-registry%lib{opengl-registry}
+
 ./: lib{sdl3}
 
 # Public headers.
@@ -288,7 +298,6 @@ out_pfx_cfg = [dir_path] $out_root/src/build_config/
 
 c.poptions =+ "-I$out_pfx_cfg" "-I$out_pfx_src" "-I$src_pfx_src" \
               "-I$out_pfx_inc" "-I$src_pfx_inc" \
-              "-I$src_pfx_src/video/khronos" \
               -DUSING_GENERATED_CONFIG_H \
               -D_GNU_SOURCE=1
 
