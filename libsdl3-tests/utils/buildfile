@@ -1,41 +1,15 @@
-intf_libs = # Interface dependencies.
-impl_libs = # Implementation dependencies.
-#import xxxx_libs += libhello%lib{hello}
+import libs = libsdl3%lib{sdl3}
 
-lib{sdltests_utils}: {h c}{**} $impl_libs $intf_libs
-
-# Build options.
+# sdltests_utils: upstream's own internal utility object library, shared
+# across test executables (upstream/test/CMakeLists.txt:
+# add_library(sdltests_utils OBJECT testutils.c)). Not exported: only ever
+# linked into this package's own test executable. libue{}, not libul{},
+# because the consumer is an executable, not another library.
 #
-c.poptions =+ "-I$out_root" "-I$src_root"
+libue{sdltests_utils}: {h c}{testutils} $libs
 
-#obja{*}: c.poptions += -DUTILS_STATIC_BUILD
-#objs{*}: c.poptions += -DUTILS_SHARED_BUILD
-
-# Export options.
+# The permissive license covering testutils.* specifically (upstream/test/
+# LICENSE.txt, more permissive than the package's own top-level zlib
+# LICENSE.txt). Not part of the installed surface, so install = false.
 #
-lib{sdltests_utils}:
-{
-  c.export.poptions = "-I$out_root" "-I$src_root"
-  c.export.libs = $intf_libs
-}
-
-#liba{sdltests_utils}: c.export.poptions += -DUTILS_STATIC
-#libs{sdltests_utils}: c.export.poptions += -DUTILS_SHARED
-
-# For pre-releases use the complete version to make sure they cannot
-# be used in place of another pre-release or the final version. See
-# the version module for details on the version.* variable values.
-#
-if $version.pre_release
-  lib{sdltests_utils}: bin.lib.version = "-$version.project_id"
-else
-  lib{sdltests_utils}: bin.lib.version = "-$version.major.$version.minor"
-
-# Install into the utils/ subdirectory of, say, /usr/include/
-# recreating subdirectories.
-#
-h{*}:
-{
-  install         = include/utils/
-  install.subdirs = true
-}
+./: legal{LICENSE.txt}: install = false
