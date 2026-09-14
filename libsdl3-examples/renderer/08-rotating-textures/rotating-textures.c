@@ -1,0 +1,1 @@
+../../../upstream/examples/renderer/08-rotating-textures/rotating-textures.c

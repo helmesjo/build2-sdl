@@ -1,0 +1,1 @@
+../../../upstream/examples/renderer/15-cliprect/cliprect.c

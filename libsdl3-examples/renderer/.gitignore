@@ -1,1 +1,16 @@
-libsdl3-examples
+renderer-clear
+renderer-primitives
+renderer-lines
+renderer-points
+renderer-rectangles
+renderer-textures
+renderer-streaming-textures
+renderer-rotating-textures
+renderer-scaling-textures
+renderer-geometry
+renderer-color-mods
+renderer-viewport
+renderer-cliprect
+renderer-read-pixels
+renderer-debug-text
+renderer-affine-textures
