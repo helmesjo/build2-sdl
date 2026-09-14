@@ -1,16 +1,20 @@
-import libs  = libsdl3%lib{sdl3}
-import tlibs = libsdl3-tests%lib{sdl3-test}
+import libs = libsdl3%lib{sdl3}
 
-# sdltests_utils lives in the sibling utils/ subdirectory of this same
-# package -- reached with a plain include, not the %-qualified import used
-# above for libsdl3 and lib{sdl3-test} (those cross a real project boundary;
-# utils/ does not, it's an ordinary sibling directory). The trailing slash
-# is required: `include ../utils` (bare directory, no slash) fails with
-# "unable to read buildfile utils: is a directory".
+# lib{sdl3-test} (src/) and libue{sdltests_utils} (utils/) both live in
+# ordinary sibling directories of this same package/project (one
+# build/bootstrap.build for the whole of libsdl3-tests) -- reached with a
+# plain include, not a %-qualified import. %-qualified import (used for
+# libsdl3 above) is for crossing a real package boundary; using it for a
+# same-project sibling resolves only by accident, when both packages
+# happen to be configured together in one shared bpkg configuration, and
+# fails in a genuinely standalone build. The trailing slash on each
+# include is required: `include ../utils` (bare directory, no slash)
+# fails with "unable to read buildfile utils: is a directory".
 #
+include ../src/
 include ../utils/
 
-exe{testautomation}: c{testautomation*} $libs $tlibs ../utils/libue{sdltests_utils} testscript
+exe{testautomation}: c{testautomation*} $libs ../src/lib{sdl3-test} ../utils/libue{sdltests_utils} testscript
 
 # This is the package's actual test: not inside a bdep-new tests/
 # subproject (there isn't one -- no-tests at scaffold time), so mark it
