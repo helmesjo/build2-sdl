@@ -6,3 +6,12 @@ import libs = libsdl3%lib{sdl3}
 ./: exe{input-gamepad-events}:   c{04-gamepad-events/gamepad-events}     $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"
+
+# Runtime resource upstream's own build copies next to this executable
+# (upstream/examples/CMakeLists.txt DATAFILES).
+#
+exe{input-gamepad-polling}: file{gamepad_front.png}: include = adhoc
+
+# Install next to the executable that uses it.
+#
+file{gamepad_front.png}@./: install = $install.bin
