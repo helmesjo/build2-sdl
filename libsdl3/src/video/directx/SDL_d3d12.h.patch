@@ -1,0 +1,11 @@
+--- SDL_d3d12.h.orig	2026-07-30 18:42:47
++++ SDL_d3d12.h	2026-09-14 22:14:49
+@@ -38,7 +38,7 @@
+ #endif // WINAPI_PARTITION_GAMES
+ 
+ #define COBJMACROS
+-#include "d3d12.h"
++#include <directx/d3d12.h>
+ #include <dxgi1_6.h>
+ #include <dxgidebug.h>
+ 
