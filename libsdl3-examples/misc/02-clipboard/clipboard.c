@@ -1,0 +1,1 @@
+../../../upstream/examples/misc/02-clipboard/clipboard.c

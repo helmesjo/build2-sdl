@@ -1,0 +1,1 @@
+../../../upstream/examples/misc/01-power/power.c
