@@ -33,6 +33,13 @@ exe{testautomation}: install = false
 #
 exe{testautomation}: file{*.png *.wav *.csv moose.dat utf8.txt} h{*}: include = adhoc
 
+# Private headers (testautomation_images.h, testautomation_suites.h): not
+# part of the installed surface, same reasoning as h{*}: install = false in
+# src/buildfile. Headers install by default unless told otherwise, so this
+# is required, not just belt-and-suspenders.
+#
+h{*}: install = false
+
 # testautomation_joystick.c does #include "../src/joystick/usb_ids.h" as in
 # upstream (test/ next to src/). That header is private to libsdl3 and not
 # exported or installed, so importing lib{sdl3} does not expose it. List it
