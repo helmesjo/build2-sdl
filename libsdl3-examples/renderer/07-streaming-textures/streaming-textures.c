@@ -1,0 +1,1 @@
+../../../upstream/examples/renderer/07-streaming-textures/streaming-textures.c

@@ -1,6 +1,20 @@
-libs =
-#import libs += libhello%lib{hello}
+import libs = libsdl3%lib{sdl3}
 
-exe{libsdl3-examples}: {h c}{**} $libs
+./: exe{renderer-clear}:              c{01-clear/clear}                            $libs
+./: exe{renderer-primitives}:         c{02-primitives/primitives}                  $libs
+./: exe{renderer-lines}:              c{03-lines/lines}                            $libs
+./: exe{renderer-points}:             c{04-points/points}                         $libs
+./: exe{renderer-rectangles}:         c{05-rectangles/rectangles}                  $libs
+./: exe{renderer-textures}:           c{06-textures/textures}                      $libs
+./: exe{renderer-streaming-textures}: c{07-streaming-textures/streaming-textures}  $libs
+./: exe{renderer-rotating-textures}:  c{08-rotating-textures/rotating-textures}    $libs
+./: exe{renderer-scaling-textures}:   c{09-scaling-textures/scaling-textures}      $libs
+./: exe{renderer-geometry}:           c{10-geometry/geometry}                      $libs
+./: exe{renderer-color-mods}:         c{11-color-mods/color-mods}                  $libs
+./: exe{renderer-viewport}:           c{14-viewport/viewport}                      $libs
+./: exe{renderer-cliprect}:           c{15-cliprect/cliprect}                      $libs
+./: exe{renderer-read-pixels}:        c{17-read-pixels/read-pixels}                $libs
+./: exe{renderer-debug-text}:         c{18-debug-text/debug-text}                  $libs
+./: exe{renderer-affine-textures}:    c{19-affine-textures/affine-textures}        $libs
 
 c.poptions =+ "-I$out_root" "-I$src_root"

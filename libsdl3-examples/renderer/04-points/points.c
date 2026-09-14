@@ -1,0 +1,1 @@
+../../../upstream/examples/renderer/04-points/points.c

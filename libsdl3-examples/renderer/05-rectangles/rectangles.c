@@ -1,0 +1,1 @@
+../../../upstream/examples/renderer/05-rectangles/rectangles.c
