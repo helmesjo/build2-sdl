@@ -2,7 +2,7 @@
 #
 # These names are intentionally absent from config/subs-*.build so they are not
 # forced via autoconf.substitutions. Values are target-specific variables on
-# h{build_config/SDL_build_config} (lookup priority 2).
+# build_config/h{SDL_build_config} (lookup priority 2).
 #
 # Policy:
 # - Enable a driver when its primary system header is present.
@@ -14,7 +14,7 @@
 # CI installs the corresponding -dev packages via manifest *-build-config sys:
 # entries so these probes light up on automated builds.
 
-h{build_config/SDL_build_config}:
+build_config/h{SDL_build_config}:
 {
   # --- X11 ---
   #
@@ -76,12 +76,20 @@ h{build_config/SDL_build_config}:
 
   # --- KMS/DRM ---
   #
+  # xf86drm.h itself #includes the unqualified <drm.h>, which some
+  # distributions (e.g. Debian) install under a separate libdrm/ prefix not
+  # on the default search path, so xf86drm.h being found is not by itself
+  # proof the driver will compile. Check drm.h too so this stays accurate
+  # (undefined, not just falsely true) wherever that split exists.
+  #
   SDL_VIDEO_DRIVER_KMSDRM = \
     ($c.find_system_header("xf86drm.h") != [null] && \
-     $c.find_system_header("xf86drmMode.h") != [null])
+     $c.find_system_header("xf86drmMode.h") != [null] && \
+     $c.find_system_header("drm.h") != [null])
   SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC = \
     ($c.find_system_header("xf86drm.h") != [null] && \
-     $c.find_system_header("xf86drmMode.h") != [null] \
+     $c.find_system_header("xf86drmMode.h") != [null] && \
+     $c.find_system_header("drm.h") != [null] \
        ? '"libdrm.so.2"' : false)
   SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM = \
     ($c.find_system_header("gbm.h") != [null] ? '"libgbm.so.1"' : false)
