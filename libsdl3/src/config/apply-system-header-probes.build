@@ -1,5 +1,5 @@
 # Optional third-party / package header probes via $c.find_system_header().
-# Applied as target-specific variables on h{build_config/SDL_build_config}.
+# Applied as target-specific variables on build_config/h{SDL_build_config}.
 #
 # Standard C library headers and functions are handled by libbuild2-autoconf
 # builtin checks or project checks in build/autoconf/checks/. Do not put those
@@ -8,9 +8,20 @@
 #
 # Lookup: ($c.find_system_header("path") != [null])
 
-h{build_config/SDL_build_config}:
+# Probe the canonical spelling the source itself #includes first, falling
+# back to the versioned one some distributions (e.g. Debian's
+# dbus-1.0/dbus/dbus.h) install under instead: find_system_header only
+# searches compiler-default dirs (never *.poptions), so a versioned-
+# subdirectory install is invisible to the canonical name even when the
+# package is installed. Same fallback shape as HAVE_IBUS_IBUS_H below.
+#
+dbus_h = $c.find_system_header("dbus/dbus.h")
+if ($dbus_h == [null])
+  dbus_h = $c.find_system_header("dbus-1.0/dbus/dbus.h")
+
+build_config/h{SDL_build_config}:
 {
-  HAVE_DBUS_DBUS_H = ($c.find_system_header("dbus/dbus.h") != [null])
+  HAVE_DBUS_DBUS_H = ($dbus_h != [null])
   HAVE_FRIBIDI_H = ($c.find_system_header("fribidi.h") != [null])
   HAVE_IBUS_IBUS_H = \
     ($c.find_system_header("ibus-1.0/ibus.h") != [null] || \
@@ -19,11 +30,21 @@ h{build_config/SDL_build_config}:
   HAVE_LIBDECOR_H = \
     ($c.find_system_header("libdecor-0/libdecor.h") != [null] || \
      $c.find_system_header("libdecor.h") != [null])
-  HAVE_LIBTHAI_H = ($c.find_system_header("thai/thwchar.h") != [null])
-  HAVE_LIBUDEV_H = ($c.find_system_header("libudev.h") != [null])
+  HAVE_LIBTHAI_H  = ($c.find_system_header("thai/thwchar.h") != [null])
+  HAVE_LIBUDEV_H  = ($c.find_system_header("libudev.h") != [null])
   HAVE_LIBURING_H = ($c.find_system_header("liburing.h") != [null])
-  HAVE_LIBUSB = \
+  HAVE_LIBUSB     = \
     ($c.find_system_header("libusb-1.0/libusb.h") != [null] || \
      $c.find_system_header("libusb.h") != [null])
   HAVE_LINUX_INPUT_H = ($c.find_system_header("linux/input.h") != [null])
 }
+
+# The source's own #include <dbus/dbus.h> needs this directory on the
+# compile line whenever the versioned fallback above was the one that
+# resolved (when the canonical spelling resolved instead, this is already
+# a default search dir, so adding it again is harmless). Derived from
+# find_system_header's own resolved path (strip "dbus/dbus.h"), never
+# hardcoded.
+#
+if ($dbus_h != [null])
+  c.poptions =+ "-I$directory($directory($dbus_h))"
