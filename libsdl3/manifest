@@ -23,3 +23,76 @@ depends: libopengl-registry ~2026.8.3-
 depends: libdirectx-headers ^1.619.5 ? ($c.target.class == 'windows')
 depends: libminiz ^3.0.2
 tests: libsdl3-tests == $
+
+# CI configuration
+#
+# Optional Linux drivers (X11, ALSA, Pulse, PipeWire, KMS/DRM, ...) are enabled
+# only when the corresponding system headers are visible to the toolchain
+# ($c.find_system_header). Bare default Linux bots therefore still build with
+# dummy/offscreen paths. Named sys configurations install -dev packages so CI
+# exercises as many drivers as this package currently supports.
+#
+# Wayland is not enabled yet (needs wayland-scanner protocol generation).
+# FreeBSD is not yet validated for this packaging.
+#
+
+builds: -freebsd
+builds: -linux
+builds: -macos
+builds: -windows
+builds: -bindist
+
+# macOS: Apple frameworks from Xcode/CLT only. No extra sys: packages.
+#
+macos-clang-builds: macos
+macos-clang-build-include: macos_*-clang**
+macos-clang-build-exclude: **
+
+# Windows: Win32 / WASAPI / Direct3D via the stock Windows SDK (MSVC bots).
+#
+windows-msvc-builds: windows
+windows-msvc-build-include: windows*-msvc**
+windows-msvc-build-exclude: **
+
+# Debian: install multimedia -dev packages so header probes succeed. Use
+# bpkg library names (lib*). CI passes --sys-no-stub, which maps
+# libfoo -> libfoo-dev. Do not write distro -dev suffixes here (that would
+# look for libfoo-dev-dev). Ubuntu is not included: on this deployment
+# every Ubuntu bot is bindist-only (see the fedora/RHEL note below for
+# why that rules it out), so there is no non-bindist Ubuntu bot for a
+# sys: dependency config to ever match.
+#
+debian-build-config:
+\
+sys:libx11
+sys:libxext
+sys:libxcursor
+sys:libxi
+sys:libxfixes
+sys:libxrandr
+sys:libxss
+sys:libxtst
+sys:libxkbcommon
+sys:libgl
+sys:libasound2
+sys:libpulse
+sys:libpipewire-0.3
+sys:libdrm
+sys:libgbm
+sys:libudev
+sys:libdbus-1
+\
+debian-builds: sys
+debian-builds: -static
+debian-builds: -bindist
+debian-build-include: linux_debian*-**
+debian-build-exclude: **
+
+# Fedora/RHEL: every Fedora and RHEL bot on this deployment is
+# bindist-only (see https://ci.cppget.org/?build-configs=all). A
+# bindist-tagged bot verifies that this package's own generated binary
+# redistributable artifact installs cleanly, a different mechanism from
+# resolving sys: dependencies for a from-source build, so there is no
+# bot here a Fedora-style sys: dependency config could ever run on.
+#
+fedora-builds: none
