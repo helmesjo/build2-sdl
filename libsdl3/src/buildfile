@@ -345,13 +345,13 @@ else
 }
 
 lib{sdl3}: core/linux/{h c}{SDL_dbus SDL_system_theme SDL_progressbar SDL_fcitx}: \
-  include = ($linux && $have_dbus_dbus_h ? adhoc : false)
+  include = ($linux && $have_dbus_dbus_h)
 
 lib{sdl3}: core/linux/{h c}{SDL_ibus}: \
-  include = ($linux && $have_ibus_ibus_h ? adhoc : false)
+  include = ($linux && $have_ibus_ibus_h)
 
 lib{sdl3}: video/kmsdrm/{h c}{*}: \
-  include = ($linux && $sdl_video_driver_kmsdrm ? adhoc : false)
+  include = ($linux && $sdl_video_driver_kmsdrm)
 
 # Apple frameworks (match upstream CMake link line on macOS).
 #
