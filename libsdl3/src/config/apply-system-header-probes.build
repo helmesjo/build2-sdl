@@ -48,3 +48,30 @@ build_config/h{SDL_build_config}:
 #
 if ($dbus_h != [null])
   c.poptions =+ "-I$directory($directory($dbus_h))"
+
+# dbus/dbus.h itself #includes <dbus/dbus-arch-deps.h>, which every dbus
+# build (Meson or autotools) installs to a second, architecture-specific
+# directory under $libdir rather than next to the headers above under
+# $includedir, so its name varies with the multiarch triplet on
+# distributions like Debian. find_system_header cannot see it: a package-
+# specific $libdir subdirectory is never among the compiler's default
+# search directories on any platform. pkg-config is how every consumer of
+# dbus resolves it (dbus-1.pc's Cflags always list both directories), so
+# ask it for $libdir the same way; skip adding it if pkg-config itself
+# isn't installed, matching the fail-open spirit of the probes above.
+#
+if ($dbus_h != [null])
+{
+  config.environment PKG_CONFIG_PATH PKG_CONFIG_LIBDIR PKG_CONFIG_SYSROOT_DIR
+
+  pkgconf = $process.search(pkg-config)
+  if ($pkgconf == [null])
+    pkgconf = $process.search(pkgconf)
+
+  if ($pkgconf != [null])
+  {
+    dbus_libdir = $process.run($pkgconf --variable=libdir dbus-1)
+    if ($dbus_libdir != '')
+      c.poptions =+ "-I$dbus_libdir/dbus-1.0/include"
+  }
+}
