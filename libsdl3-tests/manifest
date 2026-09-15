@@ -31,19 +31,13 @@ builds: -windows
 builds: -bindist
 
 macos-clang-builds: macos
-macos-clang-build-include: macos_*-clang
+macos-clang-build-include: macos_*-clang**
 macos-clang-build-exclude: **
 
 windows-msvc-builds: windows
 windows-msvc-build-include: windows*-msvc**
 windows-msvc-build-exclude: **
 
-debian-builds: sys
-debian-builds: -static
-debian-builds: -bindist
-debian-build-include: linux_debian*-**
-debian-build-include: linux_ubuntu*-**
-debian-build-exclude: **
 debian-build-config:
 \
 sys:libx11
@@ -64,23 +58,17 @@ sys:libgbm
 sys:libudev
 sys:libdbus-1
 \
+debian-builds: sys
+debian-builds: -static
+debian-builds: -bindist
+debian-build-include: linux_debian*-**
+debian-build-exclude: **
 
-fedora-builds: sys
-fedora-builds: -static
-fedora-builds: -bindist
-fedora-build-include: linux_fedora*-**
-fedora-build-exclude: **
-fedora-build-config:
-\
-sys:libX11
-sys:libXext
-sys:libXcursor
-sys:libXi
-sys:libXfixes
-sys:libXrandr
-sys:libXScrnSaver
-sys:libXtst
-sys:libxkbcommon
-sys:libdrm
-sys:libusb1
-\
+# Fedora/RHEL: every Fedora and RHEL bot on this deployment is
+# bindist-only (see https://ci.cppget.org/?build-configs=all). A
+# bindist-tagged bot verifies that this package's own generated binary
+# redistributable artifact installs cleanly, a different mechanism from
+# resolving sys: dependencies for a from-source build, so there is no
+# bot here a Fedora-style sys: dependency config could ever run on.
+#
+fedora-builds: none
