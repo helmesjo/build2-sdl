@@ -4,6 +4,7 @@
 
 using c
 using c.objc
+using c.predefs
 
 # Objective-C ARC and the Cocoa backend's use of the modern Apple SDK
 # headers are Clang-only. Fail early with a clear diagnostic instead of
