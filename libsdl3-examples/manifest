@@ -64,11 +64,25 @@ debian-builds: -bindist
 debian-build-include: linux_debian*-**
 debian-build-exclude: **
 
-# Fedora/RHEL: every Fedora and RHEL bot on this deployment is
-# bindist-only (see https://ci.cppget.org/?build-configs=all). A
-# bindist-tagged bot verifies that this package's own generated binary
-# redistributable artifact installs cleanly, a different mechanism from
-# resolving sys: dependencies for a from-source build, so there is no
-# bot here a Fedora-style sys: dependency config could ever run on.
+# Fedora/RHEL-alike: same intent, see ../libsdl3/manifest for why
+# -bindist is subtracted below.
 #
-fedora-builds: none
+fedora-build-config:
+\
+sys:libX11
+sys:libXext
+sys:libXcursor
+sys:libXi
+sys:libXfixes
+sys:libXrandr
+sys:libXScrnSaver
+sys:libXtst
+sys:libxkbcommon
+sys:libdrm
+sys:libusb1
+\
+fedora-builds: sys
+fedora-builds: -static
+fedora-builds: -bindist
+fedora-build-include: linux_fedora*-**
+fedora-build-exclude: **
