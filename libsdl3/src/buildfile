@@ -189,12 +189,14 @@ lib{sdl3}: \
   io/windows/{h c}{*}: include = $windows
 
 # Windows also uses selected thread/generic sources (not the full tree:
-# SDL_syssem.c is windows/SDL_syssem.c, and generic/SDL_syssem.c is only
-# #included from the pthread backend). Headers use the upstream "_c" suffix
-# (SDL_syscond_c.h, SDL_sysrwlock_c.h), unlike their .c counterparts.
+# SDL_syssem.c is windows/SDL_syssem.c, generic/SDL_syssem.c is only
+# #included from the pthread backend, and SDL_systls.c is windows/SDL_systls.c,
+# never the generic one, unlike SDL_syscond/SDL_sysrwlock). Headers use the
+# upstream "_c" suffix (SDL_syscond_c.h, SDL_sysrwlock_c.h), unlike their
+# .c counterparts.
 #
 lib{sdl3}: thread/generic/h{SDL_syscond_c SDL_sysrwlock_c} \
-           thread/generic/c{SDL_syscond SDL_sysrwlock SDL_systls}: \
+           thread/generic/c{SDL_syscond SDL_sysrwlock}: \
     include = $windows
 
 lib{sdl3}: $impl_libs $intf_libs
