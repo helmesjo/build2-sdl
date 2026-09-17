@@ -19,6 +19,19 @@ h{*}: extension = h
 c{*}: extension = c
 m{*}: extension = m
 
+# Windows-only GameInput support (see src/buildfile) needs three genuine
+# C++ translation units from upstream. Every other source in this library
+# stays C. Headers stay the project's plain .h, shared with C (as
+# upstream itself does); sources use upstream's own .cpp rather than the
+# cxx module's .cxx default.
+#
+cxx.std = latest
+
+using cxx
+
+hxx{*}: extension = h
+cxx{*}: extension = cpp
+
 # The test target for cross-testing (running tests under Wine, etc).
 #
 test.target = $c.target

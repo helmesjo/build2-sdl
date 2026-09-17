@@ -160,11 +160,19 @@ lib{sdl3}: \
 #
 windows = ($c.target.class == 'windows')
 
+# video/windows and core/windows each carry one genuine C++ file
+# (SDL_windowsgameinput.cpp, SDL_gameinput.cpp): upstream's own GameInput
+# support code, unconditionally part of the source list and internally
+# #ifdef HAVE_GAMEINPUT_H'd down to a stub when the header isn't found
+# (see apply-system-header-probes.build). core/windows/pch_cpp.cpp is a
+# Visual-Studio-project-only precompiled-header seed file that upstream's
+# own CMakeLists.txt never references, excluded here for the same reason.
+#
 lib{sdl3}: \
-  video/windows/{h c}{*} \
+  video/windows/{h c cxx}{*} \
   audio/wasapi/{h c}{*} \
   audio/directsound/{h c}{*} \
-  core/windows/{h c}{*} \
+  core/windows/{h c cxx}{* -pch_cpp} \
   filesystem/windows/{h c}{*} \
   joystick/windows/{h c}{*} \
   haptic/windows/{h c}{*} \
@@ -321,7 +329,8 @@ c.poptions =+ "-I$out_pfx_cfg" "-I$out_pfx_src" "-I$src_pfx_src" \
   c.predefs.poptions = true
   c.predefs.macros = HAVE_DBUS_DBUS_H@have_dbus_dbus_h \
                      HAVE_IBUS_IBUS_H@have_ibus_ibus_h \
-                     SDL_VIDEO_DRIVER_KMSDRM@sdl_video_driver_kmsdrm
+                     SDL_VIDEO_DRIVER_KMSDRM@sdl_video_driver_kmsdrm \
+                     HAVE_GAMEINPUT_H@have_gameinput_h
 }
 
 ./: buildfile{predefs}
@@ -338,12 +347,14 @@ if ($build.meta_operation == 'perform')
   have_ibus_ibus_h = ($have_ibus_ibus_h != [null] && $have_ibus_ibus_h != 0)
   sdl_video_driver_kmsdrm = \
     ($sdl_video_driver_kmsdrm != [null] && $sdl_video_driver_kmsdrm != 0)
+  have_gameinput_h = ($have_gameinput_h != [null] && $have_gameinput_h != 0)
 }
 else
 {
   have_dbus_dbus_h = false
   have_ibus_ibus_h = false
   sdl_video_driver_kmsdrm = false
+  have_gameinput_h = false
 }
 
 lib{sdl3}: core/linux/{h c}{SDL_dbus SDL_system_theme SDL_progressbar SDL_fcitx}: \
@@ -354,6 +365,13 @@ lib{sdl3}: core/linux/{h c}{SDL_ibus}: \
 
 lib{sdl3}: video/kmsdrm/{h c}{*}: \
   include = ($linux && $sdl_video_driver_kmsdrm)
+
+# Only this one file is conditional on HAVE_GAMEINPUT_H upstream; the
+# core/windows and video/windows GameInput sources above are unconditional
+# (self-guarded internally, see the comment on the Windows source list).
+#
+lib{sdl3}: joystick/gdk/{h cxx}{*}: \
+  include = ($windows && $have_gameinput_h)
 
 # Apple frameworks (match upstream CMake link line on macOS).
 #

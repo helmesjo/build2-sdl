@@ -19,10 +19,22 @@ dbus_h = $c.find_system_header("dbus/dbus.h")
 if ($dbus_h == [null])
   dbus_h = $c.find_system_header("dbus-1.0/dbus/dbus.h")
 
+# gameinput.h ships only with a separately-installed Microsoft GDK, never
+# with a plain Windows SDK, so this correctly reads false on any build
+# machine without one, same as every other probe here. HAVE_GAMEINPUT_H
+# and SDL_JOYSTICK_GAMEINPUT are one and the same upstream condition; both
+# macros are set from this single probe (src/buildfile gates
+# joystick/gdk/ on the read-back HAVE_GAMEINPUT_H the same way it already
+# gates core/linux/{h c}{SDL_dbus ...} on HAVE_DBUS_DBUS_H).
+#
+gameinput_h = ($c.find_system_header("gameinput.h") != [null])
+
 build_config/h{SDL_build_config}:
 {
   HAVE_DBUS_DBUS_H = ($dbus_h != [null])
   HAVE_FRIBIDI_H = ($c.find_system_header("fribidi.h") != [null])
+  HAVE_GAMEINPUT_H = $gameinput_h
+  SDL_JOYSTICK_GAMEINPUT = $gameinput_h
   HAVE_IBUS_IBUS_H = \
     ($c.find_system_header("ibus-1.0/ibus.h") != [null] || \
      $c.find_system_header("ibus.h") != [null])

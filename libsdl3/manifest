@@ -2,6 +2,7 @@
 name: libsdl3
 version: 3.4.12-a.0.z
 language: c
+language: c++=impl
 project: sdl
 summary: cross-platform multimedia C library
 license: Zlib
