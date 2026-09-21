@@ -399,8 +399,18 @@ if ($c.target.class == 'windows')
     cc.libs += -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 \
                -lversion -luuid -ladvapi32 -lsetupapi -lshell32
   else
+  {
     cc.libs += user32.lib gdi32.lib winmm.lib imm32.lib ole32.lib oleaut32.lib \
                version.lib uuid.lib advapi32.lib setupapi.lib shell32.lib
+
+    # Upstream's own CMake MSVC branch unconditionally sets these too:
+    # SDL_string.c's itoa-family fallbacks intentionally call the CRT's
+    # POSIX-named/non-_s variants (itoa, _ltoa, _ultoa, _i64toa, _ui64toa),
+    # which MSVC otherwise flags as C4996.
+    #
+    c.poptions += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE \
+                  -D_CRT_SECURE_NO_WARNINGS
+  }
 
   # SDL_DECLSPEC (SDL_begin_code.h) only expands to __declspec(dllexport)
   # when DLL_EXPORT is defined. Applies to the shared-variant object
