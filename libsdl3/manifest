@@ -39,7 +39,6 @@ examples: libsdl3-examples == $
 #
 
 builds: -freebsd
-builds: -linux
 builds: -macos
 builds: -windows
 builds: -bindist
@@ -56,6 +55,13 @@ windows-msvc-builds: windows
 windows-msvc-build-include: windows*-msvc**
 windows-msvc-build-exclude: **
 
+# Debian/Fedora sys: package installs are disabled for the time being:
+# bpkg's on-demand sys-install can misfire on CI (observed: apt removing
+# the bot's own linux-image kernel package while resolving these
+# graphics/audio libs). See https://github.com/build2/build2/issues/555.
+# Re-enable once resolved upstream. The package lists below are otherwise
+# unchanged and should still be correct.
+#
 # Debian: install multimedia -dev packages so header probes succeed. Use
 # bpkg library names (lib*). CI passes --sys-no-stub, which maps
 # libfoo -> libfoo-dev. Do not write distro -dev suffixes here (that would
@@ -64,31 +70,31 @@ windows-msvc-build-exclude: **
 # why that rules it out), so there is no non-bindist Ubuntu bot for a
 # sys: dependency config to ever match.
 #
-debian-build-config:
-\
-sys:libx11
-sys:libxext
-sys:libxcursor
-sys:libxi
-sys:libxfixes
-sys:libxrandr
-sys:libxss
-sys:libxtst
-sys:libxkbcommon
-sys:libgl
-sys:libasound2
-sys:libpulse
-sys:libpipewire-0.3
-sys:libdrm
-sys:libgbm
-sys:libudev
-sys:libdbus-1
-\
-debian-builds: sys
-debian-builds: -static
-debian-builds: -bindist
-debian-build-include: linux_debian*-**
-debian-build-exclude: **
+#debian-build-config:
+#\
+#sys:libx11
+#sys:libxext
+#sys:libxcursor
+#sys:libxi
+#sys:libxfixes
+#sys:libxrandr
+#sys:libxss
+#sys:libxtst
+#sys:libxkbcommon
+#sys:libgl
+#sys:libasound2
+#sys:libpulse
+#sys:libpipewire-0.3
+#sys:libdrm
+#sys:libgbm
+#sys:libudev
+#sys:libdbus-1
+#\
+#debian-builds: sys
+#debian-builds: -static
+#debian-builds: -bindist
+#debian-build-include: linux_debian*-**
+#debian-build-exclude: **
 
 # Fedora/RHEL-alike: same intent. libfoo -> libfoo-devel (note X11 capital X).
 # Every Fedora and RHEL bot on this deployment is currently bindist-only
@@ -98,22 +104,22 @@ debian-build-exclude: **
 # Fedora bot automatically, the same mechanism the debian config above
 # already relies on.
 #
-fedora-build-config:
-\
-sys:libX11
-sys:libXext
-sys:libXcursor
-sys:libXi
-sys:libXfixes
-sys:libXrandr
-sys:libXScrnSaver
-sys:libXtst
-sys:libxkbcommon
-sys:libdrm
-sys:libusb1
-\
-fedora-builds: sys
-fedora-builds: -static
-fedora-builds: -bindist
-fedora-build-include: linux_fedora*-**
-fedora-build-exclude: **
+#fedora-build-config:
+#\
+#sys:libX11
+#sys:libXext
+#sys:libXcursor
+#sys:libXi
+#sys:libXfixes
+#sys:libXrandr
+#sys:libXScrnSaver
+#sys:libXtst
+#sys:libxkbcommon
+#sys:libdrm
+#sys:libusb1
+#\
+#fedora-builds: sys
+#fedora-builds: -static
+#fedora-builds: -bindist
+#fedora-build-include: linux_fedora*-**
+#fedora-build-exclude: **
